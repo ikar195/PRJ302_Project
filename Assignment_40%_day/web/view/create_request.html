@@ -3,13 +3,74 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
 -->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn xin nghỉ phép</title>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FCE5D3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 350px;
+            height: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .input-box {
+            width: 90%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            background-color: #357EC7;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #285A8C;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Đơn xin nghỉ phép</h2>
+        <p>Minh Đức <b></b>- IT<b></b></p>
+        <div class="input-group">
+            <label for="from-date">Từ ngày:</label>
+            <input type="date" id="from-date" class="input-box">
+        </div>
+        <div class="input-group">
+            <label for="to-date">Tới ngày:</label>
+            <input type="date" id="to-date" class="input-box">
+        </div>
+        <div class="input-group">
+            <label for="reason">Lý do:</label>
+            <textarea id="reason" class="input-box" rows="4"></textarea>
+        </div>
+        <button class="submit-btn">Gửi</button>
+    </div>
+</body>
 </html>

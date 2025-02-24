@@ -5,11 +5,53 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Login</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">        
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                background-color: #f0f0f0;
+            }
+            .login-container {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+            h2 {
+                margin-bottom: 20px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            input, button {
+                margin: 0;
+                padding: 8px;
+                border-radius: 20px;
+                border: 1px solid #ccc;
+                text-align: center;
+            }
+            input::placeholder {
+                color: gray;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        <div>TODO write content</div>
+        <div class="login-container">
+        <h2>Welcome</h2>
+        <form action="login" method="POST">
+            <input type="text" placeholder="Username" required><br>
+            <input type="password" placeholder="Password" required><br>
+            <input type="submit" value="Login"/>
+        </form>
+        </div>
     </body>
 </html>
