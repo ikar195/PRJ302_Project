@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
--->
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đơn xin nghỉ phép</title>
-<style>
+    <title>Chi tiết đơn xin nghỉ</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #FCE5D3;
@@ -39,8 +33,14 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            background-color: #f9f9f9;
+            text-align: center;
         }
-        .submit-btn {
+        .status {
+            font-weight: bold;
+            color: #d9534f;
+        }
+        .back-btn {
             background-color: #357EC7;
             color: white;
             padding: 10px 15px;
@@ -49,28 +49,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             cursor: pointer;
             margin-top: 10px;
         }
-        .submit-btn:hover {
+        .back-btn:hover {
             background-color: #285A8C;
         }
     </style>
 </head>
 <body>
     <div class="container">
+<<<<<<< HEAD
+        <h2>Chi tiết đơn xin nghỉ</h2>
+        <p><b>[Tên nhân viên]</b> - <b>[Phòng ban]</b></p>
+=======
         <h2>Đơn xin nghỉ phép</h2>
-        <p>[Tên nhân viên]<b></b> - [Phòng ban]<b></b></p>
+        <p>Minh Đức <b></b>- IT<b></b></p>
+>>>>>>> parent of 3197799 (sửa màn hình create)
         <div class="input-group">
-            <label for="from-date">Từ ngày:</label>
-            <input type="date" id="from-date" class="input-box">
+            <label>Từ ngày:</label>
+            <div class="input-box">01/01/2025</div>
         </div>
         <div class="input-group">
-            <label for="to-date">Tới ngày:</label>
-            <input type="date" id="to-date" class="input-box">
+            <label>Tới ngày:</label>
+            <div class="input-box">03/01/2025</div>
         </div>
         <div class="input-group">
-            <label for="reason">Lý do:</label>
-            <textarea id="reason" class="input-box" rows="4"></textarea>
+            <label>Lý do:</label>
+            <div class="input-box">Nghỉ phép cưới</div>
         </div>
-        <button class="submit-btn">Gửi</button>
+        <p class="status">Trạng thái: Chờ duyệt</p>
+        <button class="back-btn">Quay lại</button>
     </div>
 </body>
 </html>
