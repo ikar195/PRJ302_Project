@@ -19,7 +19,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         }
         .container {
             width: 350px;
-            height: 400px;
+            height: auto;
             background: white;
             padding: 20px;
             border-radius: 8px;
@@ -43,19 +43,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         }
         .status {
             font-weight: bold;
-            color: #d9534f;
         }
-        .back-btn {
+        .action-btn {
             background-color: #357EC7;
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+            margin: 5px;
         }
-        .back-btn:hover {
+        .action-btn:hover {
             background-color: #285A8C;
+        }
+        .reject-btn {
+            background-color: #d9534f;
+        }
+        .reject-btn:hover {
+            background-color: #b52b27;
         }
     </style>
 </head>
@@ -76,7 +81,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
             <div class="input-box">[Lý do]</div>
         </div>
         <p class="status">Trạng thái: [Trạng thái]</p>
-        <button class="back-btn">Quay lại</button>
+        <button class="action-btn">Phê duyệt</button>
+        <button class="action-btn reject-btn">Không phê duyệt</button>
+        <button class="action-btn">Quay lại</button>
     </div>
 </body>
 </html>
