@@ -134,33 +134,21 @@
             table.innerHTML += headerRow;
 
             // Danh sách nhân sự mẫu
-            const staff = ['Mr A', 'Mr B', 'Mr C', 'Mr D'];
+            const staff = ['Mr A', 'Mr B', 'Mr C', 'Mr D', 'Mr D1', 'Mr D2', 'Mr D3', 'Mr D4', 'Mr D5', 'Mr D6', 'Mr D7', 'Mr D8', 'Mr D9'];
             const sampleData = {
                 'Mr A': Array(days).fill('working'), // Mr A luôn đi làm
-                'Mr B': Array(days).fill('working').map((val, idx) => {
-                    const date = new Date(startDate);
-                    date.setDate(startDate.getDate() + idx);
-                    const day = date.getDate();
-                    const month = date.getMonth() + 1;
-                    if ((month === 1 && day >= 3 && day <= 5) || (month === 1 && day >= 8 && day <= 9)) return 'leave';
-                    return 'working';
-                }),
-                'Mr C': Array(days).fill('working').map((val, idx) => {
-                    const date = new Date(startDate);
-                    date.setDate(startDate.getDate() + idx);
-                    const day = date.getDate();
-                    const month = date.getMonth() + 1;
-                    if (month === 1 && day >= 7 && day <= 9) return 'leave';
-                    return 'working';
-                }),
-                'Mr D': Array(days).fill('working').map((val, idx) => {
-                    const date = new Date(startDate);
-                    date.setDate(startDate.getDate() + idx);
-                    const day = date.getDate();
-                    const month = date.getMonth() + 1;
-                    if (month === 1 && day >= 3 && day <= 4) return 'leave';
-                    return 'working';
-                })
+                'Mr B': Array(days).fill('working'),
+                'Mr C': Array(days).fill('working'),
+                'Mr D': Array(days).fill('working'),
+                'Mr D1': Array(days).fill('working'),
+                'Mr D2': Array(days).fill('working'),
+                'Mr D3': Array(days).fill('working'),
+                'Mr D4': Array(days).fill('working'),
+                'Mr D5': Array(days).fill('working'),
+                'Mr D6': Array(days).fill('working'),
+                'Mr D7': Array(days).fill('working'),
+                'Mr D8': Array(days).fill('working'),
+                'Mr D9': Array(days).fill('working')
             };
 
             staff.forEach(person => {
