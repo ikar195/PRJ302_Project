@@ -35,10 +35,16 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px; 
+            margin-top: 10px;
+        }
         .submit-btn {
             background-color: #357EC7;
             color: white;
-            padding: 10px 20px;
+            padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -46,9 +52,12 @@
             text-decoration: none;
             display: inline-block;
             width: 100px;
-            height: 40px;
-            line-height: 20px;
-            font-size: 14px;
+            height: 40px; 
+            line-height: 20px; 
+            font-size: 14px; 
+            white-space: nowrap; 
+            text-align: center;
+            box-sizing: border-box;
         }
         .submit-btn:hover {
             background-color: #285A8C;
@@ -71,8 +80,10 @@
             <label for="reason">Lý do:</label>
             <textarea id="reason" class="input-box" rows="4" placeholder="Nhập lý do nghỉ phép (tối đa 200 ký tự)"></textarea>
         </div>
-        <button class="submit-btn">Gửi</button>
-        <a href="../home.html" class="submit-btn">Quay lại</a>
+        <div class="button-group">
+            <button class="submit-btn">Gửi</button>
+            <a href="../home.html" class="submit-btn">Quay lại</a>
+        </div>
     </div>
 </body>
 </html>
