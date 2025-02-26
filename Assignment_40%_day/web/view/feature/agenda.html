@@ -4,48 +4,96 @@
     <meta charset="UTF-8">
     <title>Màn hình Agenda</title>
     <style>
-        .agenda-table {
-            border-collapse: collapse;
-            width: 100%;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FCE5D3; /* Màu đào nhạt */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        .agenda-table td, .agenda-table th {
-            border: 1px solid black;
-            padding: 5px;
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-        }
-        .working {
-            background-color: green;
-        }
-        .leave {
-            background-color: red;
         }
         .date-selection {
             margin-bottom: 20px;
         }
         .date-selection label {
             margin-right: 10px;
+            font-weight: bold;
         }
         .date-selection input {
-            margin-right: 20px;
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .action-btn {
+            background-color: #357EC7; /* Xanh dương */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .action-btn:hover {
+            background-color: #285A8C; /* Xanh dương đậm hơn khi hover */
+        }
+        .agenda-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .agenda-table th, .agenda-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        .agenda-table th {
+            background-color: #357EC7; /* Xanh dương cho tiêu đề */
+            color: white;
+            font-weight: bold;
+        }
+        .working {
+            background-color: #00CC00; /* Xanh lá nhạt cho "đi làm" */
+        }
+        .leave {
+            background-color: #d9534f; /* Đỏ cho "nghỉ phép" */
+        }
+        h2 {
+            color: #333;
+        }
+        p, h3 {
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <h2>Màn hình Agenda giúp trưởng phòng nắm bắt tình hình lao động trong một khoảng thời gian tùy ý.</h2>
-    
-    <!-- Phần chọn ngày -->
-    <div class="date-selection">
-        <label for="start-date">Chọn ngày bắt đầu: </label>
-        <input type="date" id="start-date" name="start-date">
-        <label for="end-date">Chọn ngày kết thúc: </label>
-        <input type="date" id="end-date" name="end-date">
-        <button onclick="updateAgenda()">Xem Agenda</button>
+    <div class="container">
+        <h2>Màn hình Agenda</h2>
+        
+        <!-- Phần chọn ngày -->
+        <div class="date-selection">
+            <label for="start-date">Ngày bắt đầu: </label>
+            <input type="date" id="start-date" name="start-date">
+            <label for="end-date">Ngày kết thúc: </label>
+            <input type="date" id="end-date" name="end-date">
+            <button class="action-btn" onclick="updateAgenda()">Xem Agenda</button>
+        </div>
+        
+        <table class="agenda-table" id="agenda-table">
+            <!-- Bảng sẽ được cập nhật bằng JavaScript -->
+        </table>
     </div>
-    
-    <h3 id="agenda-description">Vui lòng chọn khoảng thời gian để xem lịch trình nhân sự.</h3>
-    <table class="agenda-table" id="agenda-table">
-        <!-- Bảng sẽ được cập nhật bằng JavaScript -->
-    </table>
 
     <script>
         function updateAgenda() {
@@ -71,10 +119,6 @@
             // Tính số ngày trong khoảng thời gian
             const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
-            // Cập nhật mô tả
-            const description = `Bảng bên dưới biểu diễn tình hình nhân sự từ ngày ${startDate.toLocaleDateString('vi-VN')} đến ngày ${endDate.toLocaleDateString('vi-VN')}. Trong đó, ô màu xanh là có đi làm, ô màu đỏ là nghỉ phép.`;
-            document.getElementById('agenda-description').textContent = description;
-
             // Cập nhật bảng
             const table = document.getElementById('agenda-table');
             table.innerHTML = ''; // Xóa bảng cũ
@@ -91,12 +135,38 @@
 
             // Danh sách nhân sự mẫu
             const staff = ['Mr A', 'Mr B', 'Mr C', 'Mr D'];
+            const sampleData = {
+                'Mr A': Array(days).fill('working'), // Mr A luôn đi làm
+                'Mr B': Array(days).fill('working').map((val, idx) => {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + idx);
+                    const day = date.getDate();
+                    const month = date.getMonth() + 1;
+                    if ((month === 1 && day >= 3 && day <= 5) || (month === 1 && day >= 8 && day <= 9)) return 'leave';
+                    return 'working';
+                }),
+                'Mr C': Array(days).fill('working').map((val, idx) => {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + idx);
+                    const day = date.getDate();
+                    const month = date.getMonth() + 1;
+                    if (month === 1 && day >= 7 && day <= 9) return 'leave';
+                    return 'working';
+                }),
+                'Mr D': Array(days).fill('working').map((val, idx) => {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + idx);
+                    const day = date.getDate();
+                    const month = date.getMonth() + 1;
+                    if (month === 1 && day >= 3 && day <= 4) return 'leave';
+                    return 'working';
+                })
+            };
+
             staff.forEach(person => {
                 let row = `<tr><td>${person}</td>`;
                 for (let i = 0; i < days; i++) {
-                    // Dữ liệu mẫu: ngẫu nhiên đi làm hoặc nghỉ phép
-                    const status = Math.random() > 0.5 ? 'working' : 'leave';
-                    row += `<td class="${status}"></td>`;
+                    row += `<td class="${sampleData[person][i]}"></td>`;
                 }
                 row += '</tr>';
                 table.innerHTML += row;
