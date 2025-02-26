@@ -1,0 +1,71 @@
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda nhân sự</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FCE5D3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #357EC7;
+            color: white;
+        }
+        .working {
+            background-color: #98FB98;
+        }
+        .absent {
+            background-color: #FF6347;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Agenda nhân sự</h2>
+        <table>
+            <tr>
+                <th>Nhân viên</th>
+                <th>1/1</th>
+                <th>2/1</th>
+                <th>3/1</th>
+            </tr>
+            <tr>
+                <td>Mr. A</td>
+                <td class="working">Làm việc</td>
+                <td class="absent">Nghỉ</td>
+                <td class="working">Làm việc</td>
+            </tr>
+            <tr>
+                <td>Mr. B</td>
+                <td class="absent">Nghỉ</td>
+                <td class="working">Làm việc</td>
+                <td class="working">Làm việc</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
