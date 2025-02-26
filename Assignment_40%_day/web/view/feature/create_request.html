@@ -3,9 +3,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đơn xin nghỉ phép</title>
-<style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             background-color: #FCE5D3;
             display: flex;
             justify-content: center;
@@ -14,50 +16,68 @@
             margin: 0;
         }
         .container {
-            width: 350px;
-            height: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            height: 480px;
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
             text-align: center;
+        }
+        h2 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
         }
         .input-group {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            width: 90%;
+            text-align: left;
         }
         .input-box {
             width: 90%;
-            padding: 8px;
+            padding: 10px;
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 14px;
         }
         .button-group {
             display: flex;
             justify-content: center;
-            gap: 10px; 
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 20px;
         }
         .submit-btn {
             background-color: #357EC7;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-top: 10px;
+            font-size: 16px;
+            width: 120px;
+            height: 40px;
+            line-height: 16px;
             text-decoration: none;
             display: inline-block;
-            width: 100px;
-            height: 40px; 
-            line-height: 20px; 
-            font-size: 14px; 
-            white-space: nowrap; 
+            white-space: nowrap;
             text-align: center;
             box-sizing: border-box;
+            transition: background-color 0.3s;
         }
         .submit-btn:hover {
             background-color: #285A8C;
@@ -67,22 +87,22 @@
 <body>
     <div class="container">
         <h2>Đơn xin nghỉ phép</h2>
-        <p>[Nhân viên] <b></b>- [Phòng ban]<b></b></p>
+        <p><i class="fas fa-user"></i><b> [Nhân viên]</b><b> - [Phòng ban]</b></p>
         <div class="input-group">
-            <label for="from-date">Từ ngày:</label>
-            <input type="date" id="from-date" class="input-box" placeholder="Chọn ngày bắt đầu">
+            <label for="from-date"><i class="fas fa-calendar-alt"></i> Từ ngày:</label>
+            <input type="date" id="from-date" class="input-box" placeholder="DD/MM/YYYY">
         </div>
         <div class="input-group">
-            <label for="to-date">Tới ngày:</label>
-            <input type="date" id="to-date" class="input-box" placeholder="Chọn ngày kết thúc">
+            <label for="to-date"><i class="fas fa-calendar-alt"></i> Tới ngày:</label>
+            <input type="date" id="to-date" class="input-box" placeholder="DD/MM/YYYY">
         </div>
         <div class="input-group">
-            <label for="reason">Lý do:</label>
-            <textarea id="reason" class="input-box" rows="4" placeholder="Nhập lý do nghỉ phép (tối đa 200 ký tự)"></textarea>
+            <label for="reason"><i class="fas fa-file-alt"></i> Lý do:</label>
+            <textarea id="reason" class="input-box" rows="4" placeholder="Nhập lý do nghỉ phép (tối đa 200 ký tự, ví dụ: ốm, việc gia đình)"></textarea>
         </div>
         <div class="button-group">
-            <button class="submit-btn">Gửi</button>
-            <a href="../home.html" class="submit-btn">Quay lại</a>
+            <button class="submit-btn"><i class="fas fa-paper-plane"></i> Gửi</button>
+            <a href="../home.html" class="submit-btn"><i class="fas fa-arrow-left"></i> Home</a>
         </div>
     </div>
 </body>
