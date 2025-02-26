@@ -7,34 +7,57 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết đơn xin nghỉ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #FCE5D3;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
             display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             margin: 0;
         }
         .container {
-            width: 350px;
+            width: 400px;
             height: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
             text-align: center;
+            flex: 1;
+        }
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 15px;
         }
         .input-group {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            width: 90%;
+            text-align: left;
         }
         .input-box {
+            font-size: 14px;
             width: 90%;
-            padding: 8px;
+            padding: 10px;
             margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -43,24 +66,37 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         }
         .status {
             font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
         }
         .action-btn {
-            background-color: #357EC7;
+            background-color: #4CAF50;
             color: white;
-            padding: 10px 15px;
+            padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin: 5px;
+            margin: 10px;
+            font-size: 16px;
+            width: 120px;
+            transition: background-color 0.3s;
         }
         .action-btn:hover {
-            background-color: #285A8C;
+            background-color: #45a049;
         }
         .reject-btn {
             background-color: #d9534f;
         }
         .reject-btn:hover {
             background-color: #b52b27;
+        }
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -69,21 +105,24 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit thi
         <h2>Chi tiết đơn xin nghỉ</h2>
         <p><b>[Tên nhân viên]</b> - <b>[Phòng ban]</b></p>
         <div class="input-group">
-            <label>Từ ngày:</label>
+            <label><i class="fas fa-calendar-alt"></i> Từ ngày:</label>
             <div class="input-box">[Ngày]</div>
         </div>
         <div class="input-group">
-            <label>Tới ngày:</label>
+            <label><i class="fas fa-calendar-alt"></i> Tới ngày:</label>
             <div class="input-box">[Ngày]</div>
         </div>
         <div class="input-group">
-            <label>Lý do:</label>
+            <label><i class="fas fa-file-alt"></i> Lý do:</label>
             <div class="input-box">[Lý do]</div>
         </div>
-        <p class="status">Trạng thái: [Trạng thái]</p>
-        <button class="action-btn">Phê duyệt</button>
-        <button class="action-btn reject-btn">Không phê duyệt</button>
-        <button class="action-btn">Home</button>
+        <p class="status"><i class="fas fa-info-circle"></i> Trạng thái: [Trạng thái]</p>
+        <button class="action-btn"><i class="fas fa-check"></i> Phê duyệt</button>
+        <button class="action-btn reject-btn"><i class="fas fa-times"></i> Không phê duyệt</button>
+        <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
+    </div>
+    <div class="footer">
+        © 2025 Hệ thống quản lý nghỉ phép
     </div>
 </body>
 </html>
