@@ -1,105 +1,107 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Nhân Sự</title>
+    <title>Màn hình Agenda</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
+        .agenda-table {
             border-collapse: collapse;
+            width: 100%;
         }
-        th, td {
+        .agenda-table td, .agenda-table th {
             border: 1px solid black;
+            padding: 5px;
             text-align: center;
-            padding: 8px;
         }
-        th {
-            background-color: #f2f2f2;
-        }
-        .present {
+        .working {
             background-color: green;
-            color: white;
         }
-        .absent {
+        .leave {
             background-color: red;
-            color: white;
         }
-        .none {
-            background-color: white;
+        .date-selection {
+            margin-bottom: 20px;
+        }
+        .date-selection label {
+            margin-right: 10px;
+        }
+        .date-selection input {
+            margin-right: 20px;
         }
     </style>
 </head>
 <body>
-    <h2>Agenda Nhân Sự</h2>
-    <table>
-        <tr>
-            <th>Nhân sự</th>
-            <th>1/1</th>
-            <th>2/1</th>
-            <th>3/1</th>
-            <th>4/1</th>
-            <th>5/1</th>
-            <th>6/1</th>
-            <th>7/1</th>
-            <th>8/1</th>
-            <th>9/1</th>
-        </tr>
-        <tr>
-            <td>Mr A</td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-        </tr>
-        <tr>
-            <td>Mr B</td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="absent"></td>
-            <td class="absent"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-        </tr>
-        <tr>
-            <td>Mr C</td>
-            <td class="present"></td>
-            <td class="absent"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="absent"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-        </tr>
-        <tr>
-            <td>Mr D</td>
-            <td class="present"></td>
-            <td class="absent"></td>
-            <td class="absent"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-            <td class="present"></td>
-        </tr>
+    <h2>Màn hình Agenda giúp trưởng phòng nắm bắt tình hình lao động trong một khoảng thời gian tùy ý.</h2>
+    
+    <!-- Phần chọn ngày -->
+    <div class="date-selection">
+        <label for="start-date">Chọn ngày bắt đầu: </label>
+        <input type="date" id="start-date" name="start-date">
+        <label for="end-date">Chọn ngày kết thúc: </label>
+        <input type="date" id="end-date" name="end-date">
+        <button onclick="updateAgenda()">Xem Agenda</button>
+    </div>
+    
+    <h3 id="agenda-description">Vui lòng chọn khoảng thời gian để xem lịch trình nhân sự.</h3>
+    <table class="agenda-table" id="agenda-table">
+        <!-- Bảng sẽ được cập nhật bằng JavaScript -->
     </table>
+
+    <script>
+        function updateAgenda() {
+            // Lấy giá trị ngày từ input
+            const startDateInput = document.getElementById('start-date').value;
+            const endDateInput = document.getElementById('end-date').value;
+
+            // Kiểm tra xem người dùng đã chọn ngày chưa
+            if (!startDateInput || !endDateInput) {
+                alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc.');
+                return;
+            }
+
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(endDateInput);
+
+            // Kiểm tra ngày bắt đầu có lớn hơn ngày kết thúc không
+            if (startDate > endDate) {
+                alert('Ngày bắt đầu không thể sau ngày kết thúc.');
+                return;
+            }
+
+            // Tính số ngày trong khoảng thời gian
+            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+            // Cập nhật mô tả
+            const description = `Bảng bên dưới biểu diễn tình hình nhân sự từ ngày ${startDate.toLocaleDateString('vi-VN')} đến ngày ${endDate.toLocaleDateString('vi-VN')}. Trong đó, ô màu xanh là có đi làm, ô màu đỏ là nghỉ phép.`;
+            document.getElementById('agenda-description').textContent = description;
+
+            // Cập nhật bảng
+            const table = document.getElementById('agenda-table');
+            table.innerHTML = ''; // Xóa bảng cũ
+
+            // Tạo hàng tiêu đề (header)
+            let headerRow = '<tr><th>Nhân sự</th>';
+            for (let i = 0; i < days; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                headerRow += `<th>${currentDate.toLocaleDateString('vi-VN')}</th>`;
+            }
+            headerRow += '</tr>';
+            table.innerHTML += headerRow;
+
+            // Danh sách nhân sự mẫu
+            const staff = ['Mr A', 'Mr B', 'Mr C', 'Mr D'];
+            staff.forEach(person => {
+                let row = `<tr><td>${person}</td>`;
+                for (let i = 0; i < days; i++) {
+                    // Dữ liệu mẫu: ngẫu nhiên đi làm hoặc nghỉ phép
+                    const status = Math.random() > 0.5 ? 'working' : 'leave';
+                    row += `<td class="${status}"></td>`;
+                }
+                row += '</tr>';
+                table.innerHTML += row;
+            });
+        }
+    </script>
 </body>
 </html>
-=======
->>>>>>> parent of 7a11572 (Update agenda.html)
