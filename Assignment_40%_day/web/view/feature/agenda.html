@@ -19,13 +19,15 @@
         .container {
             width: 80%;
             max-width: 900px;
+            max-height: 580px;
             background: linear-gradient(135deg, #ffffff, #f9f9f9);
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
             text-align: center;
-            flex: 1;
-            overflow-x: auto; /* Thêm thanh cuộn ngang nếu bảng quá rộng */
+            flex: 0 0 auto;
+            margin: auto;
+            overflow: auto;
         }
         h2 {
             font-size: 28px;
@@ -65,25 +67,25 @@
         }
         .agenda-table {
             width: 100%;
-            min-width: 800px; /* Đặt chiều rộng tối thiểu để bảng không quá nhỏ */
+            min-width: 800px;
             border-collapse: collapse;
             margin: 20px 0;
-            position: relative; /* Đảm bảo bảng có context cho sticky */
+            position: relative;
         }
         .agenda-table th, .agenda-table td {
             border: 1px solid #ccc;
             padding: 12px;
             text-align: center;
             font-size: 14px;
-            white-space: nowrap; /* Ngăn nội dung trong ô xuống dòng */
+            white-space: nowrap;
         }
         .agenda-table th:first-child, .agenda-table td:first-child {
-            width: auto; /* Làm cột "Nhân sự" rộng hơn (200px là giá trị mẫu, bạn có thể điều chỉnh) */
-            background-color: #4CAF50; /* Đảm bảo cột "Nhân sự" có cùng màu với header */
-            color: white; /* Đảm bảo chữ trắng trên nền xanh lá */
-            position: sticky; /* Cố định cột "Nhân sự" khi cuộn ngang */
-            left: 0; /* Giữ cột ở bên trái */
-            z-index: 1; /* Đảm bảo cột nằm trên các cột khác khi cuộn */
+            width: auto; 
+            background-color: #4CAF50;
+            color: white;
+            position: sticky; 
+            left: 0;
+            z-index: 1;
         }
         .agenda-table th {
             background-color: #4CAF50;
@@ -91,8 +93,8 @@
             font-weight: bold;
         }
         .agenda-table td:first-child {
-            background-color: white; /* Đặt nền trắng cho cột "Nhân sự" trong các hàng dữ liệu */
-            color: #333; /* Đảm bảo chữ đen trên nền trắng */
+            background-color: white;
+            color: #333;
         }
         .working {
             background-color: #00CC00;
