@@ -3,30 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Màn hình Agenda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #FCE5D3; /* Màu đào nhạt */
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9; /* Đồng nhất màu nền với các trang khác */
             display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             margin: 0;
         }
         .container {
             width: 80%;
             max-width: 900px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Thêm gradient nhẹ */
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
             text-align: center;
+            flex: 1; /* Cho phép container co giãn để đẩy footer xuống dưới */
+        }
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
         }
         .date-selection {
             margin-bottom: 20px;
         }
         .date-selection label {
             margin-right: 10px;
+            font-size: 16px;
             font-weight: bold;
         }
         .date-selection input {
@@ -35,18 +46,21 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: #f9f9f9;
+            font-size: 14px;
         }
         .action-btn {
-            background-color: #357EC7; /* Xanh dương */
+            background-color: #4CAF50; /* Đổi màu nút thành xanh lá để đồng nhất */
             color: white;
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             margin: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         .action-btn:hover {
-            background-color: #285A8C; /* Xanh dương đậm hơn khi hover */
+            background-color: #45a049; /* Đổi màu hover để đồng nhất */
         }
         .agenda-table {
             width: 100%;
@@ -55,37 +69,41 @@
         }
         .agenda-table th, .agenda-table td {
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 12px; /* Tăng padding để dễ đọc hơn */
             text-align: center;
+            font-size: 14px;
         }
         .agenda-table th {
-            background-color: #357EC7; /* Xanh dương cho tiêu đề */
+            background-color: #4CAF50; /* Đổi màu header bảng thành xanh lá để đồng nhất */
             color: white;
             font-weight: bold;
         }
         .working {
-            background-color: #00CC00; /* Xanh lá nhạt cho "đi làm" */
+            background-color: #00CC00; /* Giữ màu xanh lá nhạt cho "đi làm" */
         }
         .leave {
-            background-color: #d9534f; /* Đỏ cho "nghỉ phép" */
+            background-color: #d9534f; /* Giữ màu đỏ cho "nghỉ phép" */
         }
-        h2 {
-            color: #333;
-        }
-        p, h3 {
-            color: #555;
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            margin-top: auto;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Màn hình Agenda</h2>
-        
-        <!-- Phần chọn ngày -->
+        <a href="../home.html" class="action-btn back-btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
         <div class="date-selection">
-            <label for="start-date">Ngày bắt đầu: </label>
+            <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>
             <input type="date" id="start-date" name="start-date">
-            <label for="end-date">Ngày kết thúc: </label>
+            <label for="end-date"><i class="fas fa-calendar-alt"></i> Ngày kết thúc: </label>
             <input type="date" id="end-date" name="end-date">
             <button class="action-btn" onclick="updateAgenda()">Xem Agenda</button>
         </div>
@@ -93,6 +111,9 @@
         <table class="agenda-table" id="agenda-table">
             <!-- Bảng sẽ được cập nhật bằng JavaScript -->
         </table>
+    </div>
+    <div class="footer">
+        © 2025 Hệ thống quản lý nghỉ phép
     </div>
 
     <script>
@@ -136,7 +157,7 @@
             // Danh sách nhân sự mẫu
             const staff = ['Mr A', 'Mr B', 'Mr C', 'Mr D', 'Mr D1', 'Mr D2', 'Mr D3', 'Mr D4', 'Mr D5', 'Mr D6', 'Mr D7', 'Mr D8', 'Mr D9'];
             const sampleData = {
-                'Mr A': Array(days).fill('working'), // Mr A luôn đi làm
+                'Mr A': Array(days).fill('working'),
                 'Mr B': Array(days).fill('working'),
                 'Mr C': Array(days).fill('working'),
                 'Mr D': Array(days).fill('working'),
