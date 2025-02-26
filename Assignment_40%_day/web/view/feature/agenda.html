@@ -33,19 +33,20 @@
             font-size: 28px;
             font-weight: 700;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 25px; /* Tăng khoảng cách dưới tiêu đề để cách nút "Quay lại" */
         }
         .date-selection {
-            margin-bottom: 20px;
+            margin-top: 20px;
+            margin-bottom: 25px; /* Tăng khoảng cách dưới phần chọn ngày để cách bảng agenda */
         }
         .date-selection label {
-            margin-right: 10px;
+            margin-right: 15px; /* Tăng khoảng cách giữa nhãn và input */
             font-size: 16px;
             font-weight: bold;
         }
         .date-selection input {
-            padding: 8px;
-            margin: 5px;
+            padding: 10px; /* Tăng padding của ô input để dễ nhìn hơn */
+            margin: 5px 10px; /* Tăng margin ngang giữa các input và nút */
             border: 1px solid #ccc;
             border-radius: 4px;
             background-color: #f9f9f9;
@@ -58,9 +59,10 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin: 5px;
+            margin: 5px 10px;
             font-size: 16px;
             transition: background-color 0.3s;
+            text-decoration: none;
         }
         .action-btn:hover {
             background-color: #45a049;
@@ -80,10 +82,10 @@
             white-space: nowrap;
         }
         .agenda-table th:first-child, .agenda-table td:first-child {
-            width: auto; 
+            width: 200px;
             background-color: #4CAF50;
             color: white;
-            position: sticky; 
+            position: sticky;
             left: 0;
             z-index: 1;
         }
@@ -112,15 +114,13 @@
             margin-top: auto;
             box-sizing: border-box;
         }
-        .back-btn {
-            margin-top: 10px;
-        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Màn hình Agenda</h2>
-        <a href="../home.html" class="action-btn back-btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
+        <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
         <div class="date-selection">
             <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>
             <input type="date" id="start-date" name="start-date">
