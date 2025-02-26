@@ -79,9 +79,17 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
-            width: auto; /* Loại bỏ chiều rộng cố định để nút tự điều chỉnh */
-            transition: background-color 0.3s;
+            width: auto; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .action-btn i {
+            font-size: 24px;
+            margin-bottom: 5px;
         }
         .action-btn:hover {
             background-color: #45a049;
@@ -98,7 +106,9 @@
             text-align: center;
             padding: 10px;
             font-size: 14px;
+            width: 100%;
             margin-top: auto;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -120,9 +130,9 @@
         </div>
         <p class="status"><i class="fas fa-info-circle"></i> Trạng thái: [Trạng thái]</p>
         <div class="button-group">
-            <button class="action-btn"><i class="fas fa-check"></i> Phê duyệt</button>
-            <button class="action-btn reject-btn"><i class="fas fa-times"></i> Không phê duyệt</button>
-            <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
+            <button class="action-btn"><i class="fas fa-check"></i><span>Phê duyệt</span></button>
+            <button class="action-btn reject-btn"><i class="fas fa-times"></i><span>Không phê duyệt</span></button>
+            <a href="../home.html" class="action-btn"><i class="fas fa-home"></i><span>Home</span></a>
         </div>
     </div>
     <div class="footer">
