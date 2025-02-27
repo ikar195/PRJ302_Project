@@ -1,230 +1,239 @@
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <title>Màn hình Agenda</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
-            body {
-                font-family: 'Roboto', Arial, sans-serif;
-                background-color: #f4f4f9;
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh;
-                justify-content: center;
-                align-items: center;
-                margin: 0;
-            }
-            .container {
-                width: 80%;
-                max-width: 900px;
-                max-height: 580px;
-                background: linear-gradient(135deg, #ffffff, #f9f9f9);
-                padding: 25px;
-                border-radius: 12px;
-                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
-                text-align: center;
-                flex: 0 0 auto;
-                margin: auto;
-                overflow: hidden;
-            }
-            h2 {
-                font-size: 28px;
-                font-weight: 700;
-                color: #333;
-                margin-bottom: 25px;
-            }
-            .date-selection {
-                margin-top: 20px;
-                margin-bottom: 25px;
-            }
-            .date-selection label {
-                margin-right: 15px;
-                font-size: 16px;
-                font-weight: bold;
-            }
-            .date-selection input {
-                padding: 10px;
-                margin: 5px 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                background-color: #f9f9f9;
-                font-size: 14px;
-            }
-            .action-btn {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 15px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                margin: 5px 10px;
-                font-size: 16px;
-                transition: background-color 0.3s;
-                text-decoration: none;
-            }
-            .action-btn:hover {
-                background-color: #45a049;
-            }
-            .table-wrapper {
-                width: 100%;
-                overflow-x: auto;  /* Cho phép cuộn ngang */
-                overflow-y: hidđen;
-                margin: 20px 0;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Màn hình Agenda</title>
+    <!-- Font và icon (nếu cần) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-            /* Table */
-            .agenda-table {
-                border-collapse: collapse;
-                width: 100%;
-                table-layout: auto;
-            }
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
 
-            .agenda-table th, .agenda-table td {
-                border: 1px solid #ccc;
-                padding: 12px;
-                text-align: center;
-                font-size: 14px;
-                white-space: nowrap; /* Không cho xuống dòng, để cột không bị co */
-            }
+        .container {
+            width: 80%;
+            max-width: 900px;
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            margin: 20px auto;
+        }
 
-            /* Header chung */
-            .agenda-table th {
-                background-color: #4CAF50;
-                color: white;
-                font-weight: bold;
-            }
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 25px;
+        }
 
-            /* Cột đầu tiên (Nhân sự) sticky */
-            .agenda-table th:first-child,
-            .agenda-table td:first-child {
-                position: sticky; /* Cố định ở bên trái */
-                left: 0;
-                z-index: 2;       /* Cao hơn các cột khác để tránh bị đè */
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-            }
+        .date-selection {
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+        .date-selection label {
+            margin-right: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .date-selection input {
+            padding: 10px;
+            margin: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            font-size: 14px;
+        }
+        .action-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 10px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+        .action-btn:hover {
+            background-color: #45a049;
+        }
 
-            /* Riêng ô td đầu tiên (danh sách nhân sự) cho màu nền khác header */
-            .agenda-table td:first-child {
-                background-color: #fff;
-                color: #333;
-                font-weight: 600;
-            }
+        /* Bọc table để có thể cuộn ngang + dọc */
+        .table-wrapper {
+            width: 100%;
+            max-height: 400px;  /* Đặt chiều cao tối đa */
+            overflow: auto;     /* Cho phép cuộn cả ngang lẫn dọc */
+            margin: 20px 0;
+            border: 1px solid #ccc; /* Viền tùy chọn cho khung nhìn rõ hơn */
+        }
 
-            .working {
-                background-color: #00CC00;
-            }
-            .leave {
-                background-color: #d9534f;
-            }
-            .footer {
-                background-color: #333;
-                color: white;
-                text-align: center;
-                padding: 10px;
-                font-size: 14px;
-                width: 100%;
-                margin-top: auto;
-                box-sizing: border-box;
-            }
+        /* Table */
+        .agenda-table {
+            border-collapse: collapse;
+            width: 100%;
+            table-layout: auto;
+        }
 
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Màn hình Agenda</h2>
-            <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
-            <div class="date-selection">
-                <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>
-                <input type="date" id="start-date" name="start-date">
-                <label for="end-date"><i class="fas fa-calendar-alt"></i> Ngày kết thúc: </label>
-                <input type="date" id="end-date" name="end-date">
-                <button class="action-btn" onclick="updateAgenda()">Xem Agenda</button>
-            </div>
+        /* Ô chung */
+        .agenda-table th, .agenda-table td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            white-space: nowrap; /* Không cho xuống dòng */
+        }
 
-            <div class="table-wrapper">
-                <table class="agenda-table" id="agenda-table">
-                    <!-- Nội dung bảng sẽ được sinh bởi JavaScript -->
-                </table>
-            </div>
+        /* Sticky HEADER (hàng đầu) */
+        .agenda-table thead th {
+            position: sticky;
+            top: 0;             /* Dính trên cùng */
+            z-index: 3;         /* Cao hơn tbody */
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        /* Sticky COLUMN (cột đầu) */
+        .agenda-table th:first-child,
+        .agenda-table td:first-child {
+            position: sticky;
+            left: 0;           /* Dính sát lề trái */
+            z-index: 2;        /* Cao hơn các cột còn lại */
+            background-color: #fff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Riêng ô giao giữa thead và cột đầu (top-left corner) */
+        .agenda-table thead th:first-child {
+            z-index: 5;        /* Cao nhất để không bị đè */
+            background-color: #4CAF50; /* Giữ màu header */
+            color: #fff;
+        }
+
+        /* Màu cho các trạng thái ví dụ */
+        .working {
+            background-color: #00CC00;
+        }
+        .leave {
+            background-color: #d9534f;
+        }
+
+        .footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+            margin-top: auto;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Màn hình Agenda</h2>
+        <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
+
+        <div class="date-selection">
+            <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>
+            <input type="date" id="start-date" name="start-date">
+            <label for="end-date"><i class="fas fa-calendar-alt"></i> Ngày kết thúc: </label>
+            <input type="date" id="end-date" name="end-date">
+            <button class="action-btn" onclick="updateAgenda()">Xem Agenda</button>
         </div>
-        <div class="footer">
-            © 2025 Hệ thống quản lý nghỉ phép
+
+        <div class="table-wrapper">
+            <table class="agenda-table" id="agenda-table">
+                <!-- Nội dung sẽ được sinh bởi JavaScript -->
+            </table>
         </div>
+    </div>
 
-        <script>
-            function updateAgenda() {
-                // Lấy giá trị ngày từ input
-                const startDateInput = document.getElementById('start-date').value;
-                const endDateInput = document.getElementById('end-date').value;
+    <div class="footer">
+        © 2025 Hệ thống quản lý nghỉ phép
+    </div>
 
-                // Kiểm tra xem người dùng đã chọn ngày chưa
-                if (!startDateInput || !endDateInput) {
-                    alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc.');
-                    return;
-                }
+    <script>
+        function updateAgenda() {
+            // Lấy giá trị ngày từ input
+            const startDateInput = document.getElementById('start-date').value;
+            const endDateInput = document.getElementById('end-date').value;
 
-                const startDate = new Date(startDateInput);
-                const endDate = new Date(endDateInput);
+            if (!startDateInput || !endDateInput) {
+                alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc.');
+                return;
+            }
 
-                // Kiểm tra ngày bắt đầu có lớn hơn ngày kết thúc không
-                if (startDate > endDate) {
-                    alert('Ngày bắt đầu không thể sau ngày kết thúc.');
-                    return;
-                }
+            const startDate = new Date(startDateInput);
+            const endDate = new Date(endDateInput);
 
-                // Tính số ngày trong khoảng thời gian
-                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            if (startDate > endDate) {
+                alert('Ngày bắt đầu không thể sau ngày kết thúc.');
+                return;
+            }
 
-                // Giới hạn số ngày tối đa để tránh bảng quá rộng
-                const maxDays = 31; // Giới hạn tối đa là 31 ngày (1 tháng)
-                if (days > maxDays) {
-                    alert(`Khoảng thời gian tối đa là ${maxDays} ngày. Vui lòng chọn lại.`);
-                    return;
-                }
+            // Tính số ngày
+            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
-                // Cập nhật bảng
-                const table = document.getElementById('agenda-table');
-                table.innerHTML = ''; // Xóa bảng cũ
+            // Giới hạn số ngày
+            const maxDays = 31;
+            if (days > maxDays) {
+                alert(`Khoảng thời gian tối đa là ${maxDays} ngày. Vui lòng chọn lại.`);
+                return;
+            }
 
-                // Tạo hàng tiêu đề (header)
-                let headerRow = '<tr><th>Nhân sự</th>';
+            const table = document.getElementById('agenda-table');
+            table.innerHTML = ''; // Xóa nội dung cũ
+
+            // Danh sách nhân sự (mẫu)
+            const staff = [
+                'Đoàn Minh Đức', 'Mr B', 'Mr C', 'Mr D', 'Mr D1', 
+                'Mr D2', 'Mr D3', 'Mr D4', 'Mr D5', 'Mr D6', 
+                'Mr D7', 'Mr D8', 'Mr D9'
+            ];
+
+            // Tạo dữ liệu mẫu: tất cả "working"
+            const sampleData = {};
+            staff.forEach(person => {
+                sampleData[person] = Array(days).fill('working');
+            });
+
+            // Tạo thead
+            let theadHTML = '<thead><tr><th>Nhân sự</th>';
+            for (let i = 0; i < days; i++) {
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                theadHTML += `<th>${currentDate.toLocaleDateString('vi-VN')}</th>`;
+            }
+            theadHTML += '</tr></thead>';
+
+            // Tạo tbody
+            let tbodyHTML = '<tbody>';
+            staff.forEach(person => {
+                tbodyHTML += `<tr><td>${person}</td>`;
                 for (let i = 0; i < days; i++) {
-                    const currentDate = new Date(startDate);
-                    currentDate.setDate(startDate.getDate() + i);
-                    headerRow += `<th>${currentDate.toLocaleDateString('vi-VN')}</th>`;
+                    // Gắn class cho từng ô
+                    tbodyHTML += `<td class="${sampleData[person][i]}"></td>`;
                 }
-                headerRow += '</tr>';
-                table.innerHTML += headerRow;
+                tbodyHTML += '</tr>';
+            });
+            tbodyHTML += '</tbody>';
 
-                // Danh sách nhân sự mẫu
-                const staff = ['Đoàn Minh Đức', 'Mr B', 'Mr C', 'Mr D', 'Mr D1', 'Mr D2', 'Mr D3', 'Mr D4', 'Mr D5', 'Mr D6', 'Mr D7', 'Mr D8', 'Mr D9'];
-                const sampleData = {
-                    'Đoàn Minh Đức': Array(days).fill('working'),
-                    'Mr B': Array(days).fill('working'),
-                    'Mr C': Array(days).fill('working'),
-                    'Mr D': Array(days).fill('working'),
-                    'Mr D1': Array(days).fill('working'),
-                    'Mr D2': Array(days).fill('working'),
-                    'Mr D3': Array(days).fill('working'),
-                    'Mr D4': Array(days).fill('working'),
-                    'Mr D5': Array(days).fill('working'),
-                    'Mr D6': Array(days).fill('working'),
-                    'Mr D7': Array(days).fill('working'),
-                    'Mr D8': Array(days).fill('working'),
-                    'Mr D9': Array(days).fill('working')
-                };
-
-                staff.forEach(person => {
-                    let row = `<tr><td>${person}</td>`;
-                    for (let i = 0; i < days; i++) {
-                        row += `<td class="${sampleData[person][i]}"></td>`;
-                    }
-                    row += '</tr>';
-                    table.innerHTML += row;
-                });
-            }
-        </script>
-    </body>
+            // Gộp thead + tbody vào bảng
+            table.innerHTML = theadHTML + tbodyHTML;
+        }
+    </script>
+</body>
 </html>
