@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/view/home.html");
         } else {
             // Đăng nhập thất bại: có thể chuyển về trang login với thông báo lỗi hoặc hiển thị lỗi đơn giản
-            response.getWriter().println("Login failed. Please try again.");
+            response.getWriter().println("Login failed");
         }
     }
 }
