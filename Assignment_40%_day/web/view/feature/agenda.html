@@ -1,214 +1,230 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title>Màn hình Agenda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
-        .container {
-            width: 80%;
-            max-width: 900px;
-            max-height: 580px;
-            background: linear-gradient(135deg, #ffffff, #f9f9f9);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            flex: 0 0 auto;
-            margin: auto;
-            overflow: auto;
-        }
-        h2 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 25px; /* Tăng khoảng cách dưới tiêu đề để cách nút "Quay lại" */
-        }
-        .date-selection {
-            margin-top: 20px;
-            margin-bottom: 25px; /* Tăng khoảng cách dưới phần chọn ngày để cách bảng agenda */
-        }
-        .date-selection label {
-            margin-right: 15px; /* Tăng khoảng cách giữa nhãn và input */
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .date-selection input {
-            padding: 10px; /* Tăng padding của ô input để dễ nhìn hơn */
-            margin: 5px 10px; /* Tăng margin ngang giữa các input và nút */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            font-size: 14px;
-        }
-        .action-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 5px 10px;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            text-decoration: none;
-        }
-        .action-btn:hover {
-            background-color: #45a049;
-        }
-        .agenda-table {
-            width: 100%;
-            min-width: 800px;
-            border-collapse: collapse;
-            margin: 20px 0;
-            position: relative;
-        }
-        .agenda-table th, .agenda-table td {
-            border: 1px solid #ccc;
-            padding: 12px;
-            text-align: center;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        .agenda-table th:first-child, .agenda-table td:first-child {
-            width: 200px;
-            background-color: #4CAF50;
-            color: white;
-            position: sticky;
-            left: 0;
-            z-index: 1;
-        }
-        .agenda-table th {
-            background-color: #4CAF50;
-            color: white;
-            font-weight: bold;
-        }
-        .agenda-table td:first-child {
-            background-color: white;
-            color: #333;
-        }
-        .working {
-            background-color: #00CC00;
-        }
-        .leave {
-            background-color: #d9534f;
-        }
-        .footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-            width: 100%;
-            margin-top: auto;
-            box-sizing: border-box;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Màn hình Agenda</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            body {
+                font-family: 'Roboto', Arial, sans-serif;
+                background-color: #f4f4f9;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                justify-content: center;
+                align-items: center;
+                margin: 0;
+            }
+            .container {
+                width: 80%;
+                max-width: 900px;
+                max-height: 580px;
+                background: linear-gradient(135deg, #ffffff, #f9f9f9);
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
+                text-align: center;
+                flex: 0 0 auto;
+                margin: auto;
+                overflow: hidden;
+            }
+            h2 {
+                font-size: 28px;
+                font-weight: 700;
+                color: #333;
+                margin-bottom: 25px;
+            }
+            .date-selection {
+                margin-top: 20px;
+                margin-bottom: 25px;
+            }
+            .date-selection label {
+                margin-right: 15px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .date-selection input {
+                padding: 10px;
+                margin: 5px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                background-color: #f9f9f9;
+                font-size: 14px;
+            }
+            .action-btn {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin: 5px 10px;
+                font-size: 16px;
+                transition: background-color 0.3s;
+                text-decoration: none;
+            }
+            .action-btn:hover {
+                background-color: #45a049;
+            }
+            .table-wrapper {
+                width: 100%;
+                overflow-x: auto;  /* Cho phép cuộn ngang */
+                overflow-y: hidđen;
+                margin: 20px 0;
+            }
 
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Màn hình Agenda</h2>
-        <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
-        <div class="date-selection">
-            <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>
-            <input type="date" id="start-date" name="start-date">
-            <label for="end-date"><i class="fas fa-calendar-alt"></i> Ngày kết thúc: </label>
-            <input type="date" id="end-date" name="end-date">
-            <button class="action-btn" onclick="updateAgenda()">Xem Agenda</button>
+            /* Table */
+            .agenda-table {
+                border-collapse: collapse;
+                width: 100%;
+                table-layout: auto;
+            }
+
+            .agenda-table th, .agenda-table td {
+                border: 1px solid #ccc;
+                padding: 12px;
+                text-align: center;
+                font-size: 14px;
+                white-space: nowrap; /* Không cho xuống dòng, để cột không bị co */
+            }
+
+            /* Header chung */
+            .agenda-table th {
+                background-color: #4CAF50;
+                color: white;
+                font-weight: bold;
+            }
+
+            /* Cột đầu tiên (Nhân sự) sticky */
+            .agenda-table th:first-child,
+            .agenda-table td:first-child {
+                position: sticky; /* Cố định ở bên trái */
+                left: 0;
+                z-index: 2;       /* Cao hơn các cột khác để tránh bị đè */
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Riêng ô td đầu tiên (danh sách nhân sự) cho màu nền khác header */
+            .agenda-table td:first-child {
+                background-color: #fff;
+                color: #333;
+                font-weight: 600;
+            }
+
+            .working {
+                background-color: #00CC00;
+            }
+            .leave {
+                background-color: #d9534f;
+            }
+            .footer {
+                background-color: #333;
+                color: white;
+                text-align: center;
+                padding: 10px;
+                font-size: 14px;
+                width: 100%;
+                margin-top: auto;
+                box-sizing: border-box;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Màn hình Agenda</h2>
+            <a href="../home.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
+            <div class="date-selection">
+                <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>
+                <input type="date" id="start-date" name="start-date">
+                <label for="end-date"><i class="fas fa-calendar-alt"></i> Ngày kết thúc: </label>
+                <input type="date" id="end-date" name="end-date">
+                <button class="action-btn" onclick="updateAgenda()">Xem Agenda</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="agenda-table" id="agenda-table">
+                    <!-- Nội dung bảng sẽ được sinh bởi JavaScript -->
+                </table>
+            </div>
         </div>
-        
-        <table class="agenda-table" id="agenda-table">
-            <!-- Bảng sẽ được cập nhật bằng JavaScript -->
-        </table>
-    </div>
-    <div class="footer">
-        © 2025 Hệ thống quản lý nghỉ phép
-    </div>
+        <div class="footer">
+            © 2025 Hệ thống quản lý nghỉ phép
+        </div>
 
-    <script>
-        function updateAgenda() {
-            // Lấy giá trị ngày từ input
-            const startDateInput = document.getElementById('start-date').value;
-            const endDateInput = document.getElementById('end-date').value;
+        <script>
+            function updateAgenda() {
+                // Lấy giá trị ngày từ input
+                const startDateInput = document.getElementById('start-date').value;
+                const endDateInput = document.getElementById('end-date').value;
 
-            // Kiểm tra xem người dùng đã chọn ngày chưa
-            if (!startDateInput || !endDateInput) {
-                alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc.');
-                return;
-            }
-
-            const startDate = new Date(startDateInput);
-            const endDate = new Date(endDateInput);
-
-            // Kiểm tra ngày bắt đầu có lớn hơn ngày kết thúc không
-            if (startDate > endDate) {
-                alert('Ngày bắt đầu không thể sau ngày kết thúc.');
-                return;
-            }
-
-            // Tính số ngày trong khoảng thời gian
-            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-
-            // Giới hạn số ngày tối đa để tránh bảng quá rộng
-            const maxDays = 31; // Giới hạn tối đa là 31 ngày (1 tháng)
-            if (days > maxDays) {
-                alert(`Khoảng thời gian tối đa là ${maxDays} ngày. Vui lòng chọn lại.`);
-                return;
-            }
-
-            // Cập nhật bảng
-            const table = document.getElementById('agenda-table');
-            table.innerHTML = ''; // Xóa bảng cũ
-
-            // Tạo hàng tiêu đề (header)
-            let headerRow = '<tr><th>Nhân sự</th>';
-            for (let i = 0; i < days; i++) {
-                const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + i);
-                headerRow += `<th>${currentDate.toLocaleDateString('vi-VN')}</th>`;
-            }
-            headerRow += '</tr>';
-            table.innerHTML += headerRow;
-
-            // Danh sách nhân sự mẫu
-            const staff = ['Đoàn Minh Đức', 'Mr B', 'Mr C', 'Mr D', 'Mr D1', 'Mr D2', 'Mr D3', 'Mr D4', 'Mr D5', 'Mr D6', 'Mr D7', 'Mr D8', 'Mr D9'];
-            const sampleData = {
-                'Đoàn Minh Đức': Array(days).fill('working'),
-                'Mr B': Array(days).fill('working'),
-                'Mr C': Array(days).fill('working'),
-                'Mr D': Array(days).fill('working'),
-                'Mr D1': Array(days).fill('working'),
-                'Mr D2': Array(days).fill('working'),
-                'Mr D3': Array(days).fill('working'),
-                'Mr D4': Array(days).fill('working'),
-                'Mr D5': Array(days).fill('working'),
-                'Mr D6': Array(days).fill('working'),
-                'Mr D7': Array(days).fill('working'),
-                'Mr D8': Array(days).fill('working'),
-                'Mr D9': Array(days).fill('working')
-            };
-
-            staff.forEach(person => {
-                let row = `<tr><td>${person}</td>`;
-                for (let i = 0; i < days; i++) {
-                    row += `<td class="${sampleData[person][i]}"></td>`;
+                // Kiểm tra xem người dùng đã chọn ngày chưa
+                if (!startDateInput || !endDateInput) {
+                    alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc.');
+                    return;
                 }
-                row += '</tr>';
-                table.innerHTML += row;
-            });
-        }
-    </script>
-</body>
+
+                const startDate = new Date(startDateInput);
+                const endDate = new Date(endDateInput);
+
+                // Kiểm tra ngày bắt đầu có lớn hơn ngày kết thúc không
+                if (startDate > endDate) {
+                    alert('Ngày bắt đầu không thể sau ngày kết thúc.');
+                    return;
+                }
+
+                // Tính số ngày trong khoảng thời gian
+                const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+                // Giới hạn số ngày tối đa để tránh bảng quá rộng
+                const maxDays = 31; // Giới hạn tối đa là 31 ngày (1 tháng)
+                if (days > maxDays) {
+                    alert(`Khoảng thời gian tối đa là ${maxDays} ngày. Vui lòng chọn lại.`);
+                    return;
+                }
+
+                // Cập nhật bảng
+                const table = document.getElementById('agenda-table');
+                table.innerHTML = ''; // Xóa bảng cũ
+
+                // Tạo hàng tiêu đề (header)
+                let headerRow = '<tr><th>Nhân sự</th>';
+                for (let i = 0; i < days; i++) {
+                    const currentDate = new Date(startDate);
+                    currentDate.setDate(startDate.getDate() + i);
+                    headerRow += `<th>${currentDate.toLocaleDateString('vi-VN')}</th>`;
+                }
+                headerRow += '</tr>';
+                table.innerHTML += headerRow;
+
+                // Danh sách nhân sự mẫu
+                const staff = ['Đoàn Minh Đức', 'Mr B', 'Mr C', 'Mr D', 'Mr D1', 'Mr D2', 'Mr D3', 'Mr D4', 'Mr D5', 'Mr D6', 'Mr D7', 'Mr D8', 'Mr D9'];
+                const sampleData = {
+                    'Đoàn Minh Đức': Array(days).fill('working'),
+                    'Mr B': Array(days).fill('working'),
+                    'Mr C': Array(days).fill('working'),
+                    'Mr D': Array(days).fill('working'),
+                    'Mr D1': Array(days).fill('working'),
+                    'Mr D2': Array(days).fill('working'),
+                    'Mr D3': Array(days).fill('working'),
+                    'Mr D4': Array(days).fill('working'),
+                    'Mr D5': Array(days).fill('working'),
+                    'Mr D6': Array(days).fill('working'),
+                    'Mr D7': Array(days).fill('working'),
+                    'Mr D8': Array(days).fill('working'),
+                    'Mr D9': Array(days).fill('working')
+                };
+
+                staff.forEach(person => {
+                    let row = `<tr><td>${person}</td>`;
+                    for (let i = 0; i < days; i++) {
+                        row += `<td class="${sampleData[person][i]}"></td>`;
+                    }
+                    row += '</tr>';
+                    table.innerHTML += row;
+                });
+            }
+        </script>
+    </body>
 </html>
