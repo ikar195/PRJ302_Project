@@ -18,13 +18,10 @@
         </init-param>
     </servlet>
 
-    <!-- Ánh xạ URL -->
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
-
-    <!-- Trang mặc định khi truy cập ứng dụng -->
     <welcome-file-list>
         <welcome-file>view/login.html</welcome-file>
     </welcome-file-list>
