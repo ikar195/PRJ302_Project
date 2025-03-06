@@ -68,7 +68,7 @@
     </style>
 </head>
 <body>
-    <form action="${pageContext.request.contextPath}/LoginServlet" method="post">
+    <form action="login" method="post">
         <div class="login-container">
             <img src="img/Signature.jpg" alt="Logo" class="logo">
             <div class="input-container">

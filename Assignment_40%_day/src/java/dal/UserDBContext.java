@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 
-public class UserDBContext {
+public class UserDBContext extends DBContext{
     public User authenticate(String username, String password) {
         String sql = "SELECT u.*, r.RoleName FROM Users u " +
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
                      "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
                      "WHERE u.Username = ? AND u.Password = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
@@ -55,8 +55,8 @@ public class UserDBContext {
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
                      "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
                      "WHERE u.DepartmentID = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, departmentId);
             ResultSet rs = stmt.executeQuery();
             User currentUser = null;

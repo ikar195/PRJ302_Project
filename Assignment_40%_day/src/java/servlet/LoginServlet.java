@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("/Assignment_40%25_day/view/home.jsp");
         } else {
             request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            request.getRequestDispatcher("../view/login.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/login.jsp").forward(request, response);
         }
     }
 }
