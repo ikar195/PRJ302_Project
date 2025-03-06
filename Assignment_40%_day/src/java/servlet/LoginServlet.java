@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.User;
 
-@WebServlet("/Assignment_40%25_day/login")
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private UserDBContext userDBContext = new UserDBContext();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
