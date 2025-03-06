@@ -12,11 +12,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.User;
-import java.util.logging.Logger;
 
 public class UserDBContext {
-    private static final Logger logger = Logger.getLogger(UserDBContext.class.getName());
-
     public User authenticate(String username, String password) {
         String sql = "SELECT u.*, r.RoleName FROM Users u " +
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
@@ -26,12 +23,10 @@ public class UserDBContext {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
-            logger.info("Executing query with username: " + username + ", password: " + password);
             ResultSet rs = stmt.executeQuery();
             User user = null;
             List<String> roles = new ArrayList<>();
             while (rs.next()) {
-                logger.info("Found user: " + rs.getString("Username"));
                 if (user == null) {
                     user = new User(
                         rs.getInt("UserID"),
@@ -47,15 +42,12 @@ public class UserDBContext {
                 String role = rs.getString("RoleName");
                 if (role != null) roles.add(role);
             }
-            if (user == null) logger.info("No user found for username: " + username);
             return user;
         } catch (SQLException e) {
-            logger.severe("SQL Error: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
-
 
     public List<User> getUsersByDepartment(int departmentId) {
         List<User> users = new ArrayList<>();
