@@ -19,8 +19,8 @@ public class UserDBContext extends DBContext{
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
                      "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
                      "WHERE u.Username = ? AND u.Password = ?";
-        try (
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
@@ -55,8 +55,8 @@ public class UserDBContext extends DBContext{
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
                      "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
                      "WHERE u.DepartmentID = ?";
-        try (
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, departmentId);
             ResultSet rs = stmt.executeQuery();
             User currentUser = null;
