@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import model.User;
 
-@WebServlet("/login")
+@WebServlet("/Assignment_40%25_day/login")
 public class LoginServlet extends HttpServlet {
     private UserDBContext userDBContext = new UserDBContext();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("/Assignment_40%25_day/view/home.jsp");
         } else {
             request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu!");
-            request.getRequestDispatcher("/view/login.jsp").forward(request, response);
+            request.getRequestDispatcher("../view/login.jsp").forward(request, response);
         }
     }
 }
