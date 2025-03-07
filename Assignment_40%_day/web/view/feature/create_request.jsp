@@ -106,7 +106,7 @@
     <div class="container">
         <h2>Đơn xin nghỉ phép</h2>
         <p><i class="fas fa-user"></i><b> ${sessionScope.user.fullName}</b><b> - Phòng IT</b></p>
-        <form action="../CreateRequestServlet" method="post">
+        <form action="/Assignment_40%25_day/CreateRequest" method="post">
             <div class="input-group">
                 <label for="from-date"><i class="fas fa-calendar-alt"></i> Từ ngày:</label>
                 <input type="date" id="from-date" name="startDate" class="input-box" required>

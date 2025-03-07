@@ -38,7 +38,7 @@ public class CreateServlet extends HttpServlet {
             leaveRequest.setEndDate(sdf.parse(request.getParameter("endDate")));
             leaveRequest.setReason(request.getParameter("reason"));
             leaveRequestDAO.createLeaveRequest(leaveRequest);
-            response.sendRedirect("ListRequestsServlet");
+            response.sendRedirect("ListRequests");
         } catch (IOException | ParseException e) {
             response.sendRedirect("feature/create_request.jsp");
         }
