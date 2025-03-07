@@ -23,6 +23,10 @@ import model.User;
 @WebServlet("/CreateRequest")
 public class CreateServlet extends HttpServlet {
     private final LeaveRequestDao leaveRequestDAO = new LeaveRequestDao();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/view/feature/create_request.jsp").forward(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

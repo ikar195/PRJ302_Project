@@ -25,12 +25,12 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="feature/create_request.jsp"><i class="fas fa-plus"></i> Tạo đơn xin nghỉ phép</a>
+        <a href="../CreateRequest"><i class="fas fa-plus"></i> Tạo đơn xin nghỉ phép</a>
         <a href="ListRequestsServlet"><i class="fas fa-list"></i> Xem danh sách đơn</a>
         <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.roles.contains('Admin')}">
             <a href="AgendaServlet"><i class="fas fa-calendar"></i> Xem Agenda nhân sự</a>
         </c:if>
-        <a href="login.jsp"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+        <a href="../login"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
     </div>
     <div class="welcome-section">
         <h2>Chào mừng ${sessionScope.user.fullName} đến với hệ thống quản lý đơn nghỉ phép</h2>
