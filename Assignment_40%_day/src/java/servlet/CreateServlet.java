@@ -34,6 +34,8 @@ public class CreateServlet extends HttpServlet {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date currentDate = new Date();
+            String currentDateStr = sdf.format(currentDate);
+            currentDate = sdf.parse(currentDateStr);
             Date startDate = sdf.parse(request.getParameter("startDate"));
             Date endDate = sdf.parse(request.getParameter("endDate"));
             if (startDate.before(currentDate)) {
