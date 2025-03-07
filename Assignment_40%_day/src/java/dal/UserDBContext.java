@@ -13,11 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 
-public class UserDBContext extends DBContext{
+public class UserDBContext extends DBContext {
+
     public User authenticate(String username, String password) {
-        String sql = "SELECT u.*, r.RoleName FROM Users u " +
+        String sql = "SELECT u.*, r.RoleName, d.DepartmentName " +
+                     "FROM Users u " +
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
                      "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
                      "WHERE u.Username = ? AND u.Password = ?";
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -36,7 +39,8 @@ public class UserDBContext extends DBContext{
                         rs.getString("Email"),
                         rs.getInt("DepartmentID"),
                         rs.getInt("ManagerID") == 0 ? null : rs.getInt("ManagerID"),
-                        roles
+                        roles,
+                        rs.getString("DepartmentName")
                     );
                 }
                 String role = rs.getString("RoleName");
@@ -48,12 +52,14 @@ public class UserDBContext extends DBContext{
             return null;
         }
     }
-
+    
     public List<User> getUsersByDepartment(int departmentId) {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT u.*, r.RoleName FROM Users u " +
+        String sql = "SELECT u.*, r.RoleName, d.DepartmentName " +
+                     "FROM Users u " +
                      "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
                      "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
                      "WHERE u.DepartmentID = ?";
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -74,7 +80,8 @@ public class UserDBContext extends DBContext{
                         rs.getString("Email"),
                         rs.getInt("DepartmentID"),
                         rs.getInt("ManagerID") == 0 ? null : rs.getInt("ManagerID"),
-                        roles
+                        roles,
+                        rs.getString("DepartmentName")
                     );
                 }
                 String role = rs.getString("RoleName");

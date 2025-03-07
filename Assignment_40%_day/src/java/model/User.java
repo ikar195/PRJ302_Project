@@ -20,9 +20,11 @@ public class User {
     private int departmentId;
     private Integer managerId;
     private List<String> roles;
+    private String departmentName;
 
     public User() {}
-    public User(int userId, String username, String password, String fullName, String email, int departmentId, Integer managerId, List<String> roles) {
+
+    public User(int userId, String username, String password, String fullName, String email, int departmentId, Integer managerId, List<String> roles, String departmentName) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -31,7 +33,9 @@ public class User {
         this.departmentId = departmentId;
         this.managerId = managerId;
         this.roles = roles;
+        this.departmentName = departmentName;
     }
+    
 
     public int getUserId() {
         return userId;
@@ -95,6 +99,14 @@ public class User {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
     
 }
