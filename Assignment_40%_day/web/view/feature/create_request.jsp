@@ -126,9 +126,12 @@
                 </div>
                 <div class="button-group">
                     <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i>  Gửi</button>
-                    <a href="../home.jsp" class="submit-btn"><i class="fas fa-home"></i>  Home</a>
+                    <a href="/view/home.jsp" class="submit-btn"><i class="fas fa-home"></i>  Home</a>
                 </div>
             </form>
+            <% if (request.getAttribute("error") != null) { %>
+            <p style="color: red;"><%= request.getAttribute("error") %></p>
+            <% } %>
         </div>
         <div class="footer">
             © 2025 Hệ thống quản lý nghỉ phép
