@@ -18,9 +18,14 @@ public class LeaveRequest {
     private String reason;
     private String status;
     private Date createdDate;
+    private String fullName;
+    private String departmentName;
 
     public LeaveRequest() {
     }
+    
+
+
 
     public LeaveRequest(int requestId, int userID, Date startDate, Date endDate, String reason, String status, Date createdDate) {
         this.requestId = requestId;
@@ -31,6 +36,24 @@ public class LeaveRequest {
         this.status = status;
         this.createdDate = createdDate;
     }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    
 
     public int getRequestId() {
         return requestId;

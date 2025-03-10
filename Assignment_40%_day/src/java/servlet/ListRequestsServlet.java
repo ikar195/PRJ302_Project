@@ -31,9 +31,13 @@ public class ListRequestsServlet extends HttpServlet {
         if (user.getRoles().contains("Manager")) {
             request.setAttribute("requests", leaveRequestDAO.getLeaveRequestsByDepartment(user.getDepartmentId()));
         } 
+        else{
+            request.setAttribute("requests", leaveRequestDAO.getLeaveRequestsByUser(user.getUserId()));
+        }
         if (user.getDepartmentName().contains("Manager")){
             request.setAttribute("requests", leaveRequestDAO.getLeaveRequestsByUser());
         }
+        
         request.getRequestDispatcher("/view/feature/list_requests.jsp").forward(request, response);
     }
 }

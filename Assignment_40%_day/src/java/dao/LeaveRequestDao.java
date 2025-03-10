@@ -31,57 +31,15 @@ public class LeaveRequestDao{
 
     public List<LeaveRequest> getLeaveRequestsByUser() {
         List<LeaveRequest> requests = new ArrayList<>();
-        String sql = "SELECT [RequestID], UserID, StartDate, EndDate, Reason,Status, CreatedDate FROM LeaveRequests WHERE UserID = UserID";
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
+                     "FROM LeaveRequests lr " +
+                     "JOIN Users u ON lr.UserID = u.UserID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID ";
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                requests.add(new LeaveRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getDate("StartDate"),
-                    rs.getDate("EndDate"),
-                    rs.getString("Reason"),
-                    rs.getString("Status"),
-                    rs.getTimestamp("CreatedDate")
-                ));
-            }
-        } catch (SQLException e) {
-        }
-        return requests;
-    }
-
-    public List<LeaveRequest> getLeaveRequestsByDepartment(int departmentId) {
-        List<LeaveRequest> requests = new ArrayList<>();
-        String sql = "SELECT lr.* FROM LeaveRequests lr JOIN Users u ON lr.UserID = u.UserID WHERE u.DepartmentID = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, departmentId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                requests.add(new LeaveRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getDate("StartDate"),
-                    rs.getDate("EndDate"),
-                    rs.getString("Reason"),
-                    rs.getString("Status"),
-                    rs.getTimestamp("CreatedDate")
-                ));
-            }
-        } catch (SQLException e) {
-        }
-        return requests;
-    }
-
-    public LeaveRequest getLeaveRequestById(int requestId) {
-        String sql = "SELECT * FROM LeaveRequests WHERE RequestID = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, requestId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new LeaveRequest(
+                LeaveRequest request = new LeaveRequest(
                     rs.getInt("RequestID"),
                     rs.getInt("UserID"),
                     rs.getDate("StartDate"),
@@ -90,6 +48,99 @@ public class LeaveRequestDao{
                     rs.getString("Status"),
                     rs.getTimestamp("CreatedDate")
                 );
+                request.setFullName(rs.getString("FullName"));
+                request.setDepartmentName(rs.getString("DepartmentName"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+        }
+        return requests;
+    }
+    public List<LeaveRequest> getLeaveRequestsByUser(int userID) {
+        List<LeaveRequest> requests = new ArrayList<>();
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
+                     "FROM LeaveRequests lr " +
+                     "JOIN Users u ON lr.UserID = u.UserID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
+                "Where lr.UserID = ?"
+                ;
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+           
+            while (rs.next()) {
+                LeaveRequest request = new LeaveRequest(
+                    rs.getInt("RequestID"),
+                    rs.getInt("UserID"),
+                    rs.getDate("StartDate"),
+                    rs.getDate("EndDate"),
+                    rs.getString("Reason"),
+                    rs.getString("Status"),
+                    rs.getTimestamp("CreatedDate")
+                );
+                request.setFullName(rs.getString("FullName"));
+                request.setDepartmentName(rs.getString("DepartmentName"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+        }
+        return requests;
+    }
+
+    public List<LeaveRequest> getLeaveRequestsByDepartment(int departmentId) {
+        List<LeaveRequest> requests = new ArrayList<>();
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
+                     "FROM LeaveRequests lr " +
+                     "JOIN Users u ON lr.UserID = u.UserID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
+                     "WHERE u.DepartmentID = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, departmentId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                LeaveRequest request = new LeaveRequest(
+                    rs.getInt("RequestID"),
+                    rs.getInt("UserID"),
+                    rs.getDate("StartDate"),
+                    rs.getDate("EndDate"),
+                    rs.getString("Reason"),
+                    rs.getString("Status"),
+                    rs.getTimestamp("CreatedDate")
+                );
+                request.setFullName(rs.getString("FullName"));
+                request.setDepartmentName(rs.getString("DepartmentName"));
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+        }
+        return requests;
+    }
+
+    public LeaveRequest getLeaveRequestById(int requestId) {
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
+                     "FROM LeaveRequests lr " +
+                     "JOIN Users u ON lr.UserID = u.UserID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
+                     "WHERE lr.RequestID = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, requestId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                LeaveRequest request = new LeaveRequest(
+                    rs.getInt("RequestID"),
+                    rs.getInt("UserID"),
+                    rs.getDate("StartDate"),
+                    rs.getDate("EndDate"),
+                    rs.getString("Reason"),
+                    rs.getString("Status"),
+                    rs.getTimestamp("CreatedDate")
+                );
+                request.setFullName(rs.getString("FullName"));
+                request.setDepartmentName(rs.getString("DepartmentName"));
+                return request;
             }
         } catch (SQLException e) {
         }

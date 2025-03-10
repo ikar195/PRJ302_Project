@@ -101,8 +101,8 @@
             </tr>
             <c:forEach var="req" items="${requests}">
                 <tr>
-                    <td>${sessionScope.user.fullName}</td>
-                    <td>${sessionScope.user.departmentName}</td>
+                    <td>${req.fullName}</td>
+                    <td>${req.departmentName}</td>
                     <td><fmt:formatDate value="${req.startDate}" pattern="dd/MM/yyyy"/></td>
                     <td><fmt:formatDate value="${req.endDate}" pattern="dd/MM/yyyy"/></td>
                     <td>${req.status}</td>
