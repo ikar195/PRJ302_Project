@@ -26,7 +26,7 @@
 <body>
     <div class="navbar">
         <a href="../CreateRequest"><i class="fas fa-plus"></i> Tạo đơn xin nghỉ phép</a>
-        <a href="ListRequestsServlet"><i class="fas fa-list"></i> Xem danh sách đơn</a>
+        <a href="../ListRequests"><i class="fas fa-list"></i> Xem danh sách đơn</a>
         <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.roles.contains('Admin')}">
             <a href="AgendaServlet"><i class="fas fa-calendar"></i> Xem Agenda nhân sự</a>
         </c:if>

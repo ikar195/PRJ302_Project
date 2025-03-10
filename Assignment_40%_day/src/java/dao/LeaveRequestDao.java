@@ -29,12 +29,11 @@ public class LeaveRequestDao{
         }
     }
 
-    public List<LeaveRequest> getLeaveRequestsByUser(int userId) {
+    public List<LeaveRequest> getLeaveRequestsByUser() {
         List<LeaveRequest> requests = new ArrayList<>();
-        String sql = "SELECT * FROM LeaveRequests WHERE UserID = ?";
+        String sql = "SELECT [RequestID], UserID, StartDate, EndDate, Reason,Status, CreatedDate FROM LeaveRequests WHERE UserID = UserID";
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 requests.add(new LeaveRequest(
