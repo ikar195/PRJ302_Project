@@ -84,6 +84,24 @@
             font-size: 14px; 
             margin-top: auto; 
         }
+        .pagination { 
+            margin-top: 20px; 
+        }
+        .pagination a { 
+            color: #4CAF50; 
+            padding: 8px 16px; 
+            text-decoration: none; 
+            border: 1px solid #ddd; 
+            margin: 0 4px; 
+            border-radius: 4px; 
+        }
+        .pagination a.active { 
+            background-color: #4CAF50; 
+            color: white; 
+        }
+        .pagination a:hover:not(.active) { 
+            background-color: #ddd; 
+        }
     </style>
 </head>
 <body>
@@ -110,6 +128,17 @@
                 </tr>
             </c:forEach>
         </table>
+        <div class="pagination">
+            <c:if test="${currentPage > 1}">
+                <a href="ListRequests?page=${currentPage - 1}">&laquo; Previous</a>
+            </c:if>
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <a href="ListRequests?page=${i}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+            </c:forEach>
+            <c:if test="${currentPage < totalPages}">
+                <a href="ListRequests?page=${currentPage + 1}">Next &raquo;</a>
+            </c:if>
+        </div>
     </div>
     <div class="footer">
         © 2025 Hệ thống quản lý nghỉ phép
