@@ -87,7 +87,6 @@
     <body>
         <div class="container">
             <h2>Chi tiết đơn xin nghỉ</h2>
-            <p><strong>Debug:</strong> Request ID from URL: ${param.id}</p>
             <c:if test="${not empty error}">
                 <p style="color: red;">${error}</p>
             </c:if>

@@ -189,7 +189,7 @@ public class LeaveRequestDao {
             stmt.setInt(1, requestId);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 request = new LeaveRequest(
                     rs.getInt("RequestID"),
                     rs.getInt("UserID"),
@@ -201,14 +201,15 @@ public class LeaveRequestDao {
                 );
                 request.setFullName(rs.getString("FullName"));
                 request.setDepartmentName(rs.getString("DepartmentName"));
-        
+                return request;
             }
-
-            // Kiểm tra số hàng trả về
         } catch (SQLException e) {
+            System.err.println("SQL Error: " + e.getMessage());
+    throw new RuntimeException(e);
         }
-        return request;
+        return null;
     }
+    
     public void updateLeaveRequestStatus(int requestId, String status, int approverId) {
         String sql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
         try (Connection conn = DBContext.getConnection();

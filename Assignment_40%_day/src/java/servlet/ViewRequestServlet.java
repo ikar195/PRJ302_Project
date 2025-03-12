@@ -13,13 +13,12 @@ import java.io.PrintWriter;
 
 @WebServlet("/ViewRequest")
 public class ViewRequestServlet extends HttpServlet {
+
     private final LeaveRequestDao leaveRequestDAO = new LeaveRequestDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             response.sendRedirect("login.jsp");
@@ -41,12 +40,17 @@ public class ViewRequestServlet extends HttpServlet {
         }
 
         LeaveRequest leaveRequest = leaveRequestDAO.getLeaveRequestById(requestId);
+        System.out.println("LeaveRequest: " + leaveRequest);
         if (leaveRequest == null) {
             request.setAttribute("error", "Không tìm thấy đơn xin nghỉ với ID: " + requestId);
             request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
             return;
         }
-
+        if (user.getUserId() != leaveRequest.getUserID() && !user.getRoles().contains("Manager")) {
+            request.setAttribute("error", "Bạn không có quyền xem đơn này.");
+            request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
+            return;
+        }
         request.setAttribute("request", leaveRequest);
         request.setAttribute("currentPage", request.getParameter("page"));
         request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
@@ -55,7 +59,7 @@ public class ViewRequestServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null || (!user.getRoles().contains("Manager") && !user.getRoles().contains("Admin"))) {
+        if (user == null || (!user.getRoles().contains("Manager") && !user.getDepartmentName().contains("Manager"))) {
             response.sendRedirect("ListRequests");
             return;
         }
