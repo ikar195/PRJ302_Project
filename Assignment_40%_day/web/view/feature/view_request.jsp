@@ -14,13 +14,15 @@
         <style>
             body {
                 font-family: 'Roboto', Arial, sans-serif;
-                background-color: #f4f4f4;
+                background-color: #f4f4f9;
                 display: flex;
                 flex-direction: column;
                 min-height: 100vh;
                 justify-content: center;
                 align-items: center;
                 margin: 0;
+                overflow: hidden;
+                padding: 0;
             }
             .container {
                 width: 400px;
