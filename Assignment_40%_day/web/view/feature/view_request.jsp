@@ -29,6 +29,11 @@
                 border-radius: 12px;
                 box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
                 text-align: center;
+                margin: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
             }
             h2 {
                 font-size: 28px;
