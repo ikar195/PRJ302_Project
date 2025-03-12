@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.LeaveRequest;
+import java.util.logging.Logger;
 
 public class LeaveRequestDao {
     public void createLeaveRequest(LeaveRequest request) {
@@ -176,19 +177,20 @@ public class LeaveRequestDao {
         }
         return 0;
     }
-
     public LeaveRequest getLeaveRequestById(int requestId) {
         String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
                      "FROM LeaveRequests lr " +
                      "JOIN Users u ON lr.UserID = u.UserID " +
                      "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
                      "WHERE lr.RequestID = ?";
+        LeaveRequest request = null;
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, requestId);
             ResultSet rs = stmt.executeQuery();
+
             if (rs.next()) {
-                LeaveRequest request = new LeaveRequest(
+                request = new LeaveRequest(
                     rs.getInt("RequestID"),
                     rs.getInt("UserID"),
                     rs.getDate("StartDate"),
@@ -199,14 +201,14 @@ public class LeaveRequestDao {
                 );
                 request.setFullName(rs.getString("FullName"));
                 request.setDepartmentName(rs.getString("DepartmentName"));
-                return request;
+        
             }
-        } catch (SQLException e) {
-            e.printStackTrace(); // Thêm log để debug
-        }
-        return null;
-    }
 
+            // Kiểm tra số hàng trả về
+        } catch (SQLException e) {
+        }
+        return request;
+    }
     public void updateLeaveRequestStatus(int requestId, String status, int approverId) {
         String sql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
         try (Connection conn = DBContext.getConnection();

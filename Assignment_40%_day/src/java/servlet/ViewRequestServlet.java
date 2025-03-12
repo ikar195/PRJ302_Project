@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.LeaveRequest;
 import model.User;
-
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/ViewRequest")
 public class ViewRequestServlet extends HttpServlet {
@@ -17,6 +17,9 @@ public class ViewRequestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             response.sendRedirect("login.jsp");
@@ -39,13 +42,13 @@ public class ViewRequestServlet extends HttpServlet {
 
         LeaveRequest leaveRequest = leaveRequestDAO.getLeaveRequestById(requestId);
         if (leaveRequest == null) {
-            request.setAttribute("error", "Không tìm thấy đơn xin nghỉ!");
+            request.setAttribute("error", "Không tìm thấy đơn xin nghỉ với ID: " + requestId);
             request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
             return;
         }
 
         request.setAttribute("request", leaveRequest);
-        request.setAttribute("currentPage", request.getParameter("page")); // Giữ lại trang hiện tại
+        request.setAttribute("currentPage", request.getParameter("page"));
         request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
     }
 
