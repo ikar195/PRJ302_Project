@@ -124,7 +124,7 @@
                     <td><fmt:formatDate value="${req.startDate}" pattern="dd/MM/yyyy"/></td>
                     <td><fmt:formatDate value="${req.endDate}" pattern="dd/MM/yyyy"/></td>
                     <td>${req.status}</td>
-                    <td><a href="${pageContext.request.contextPath}/ViewRequest?id=${req.requestId}">Xem (ID: ${req.requestId})</a></td>
+                    <td><a href="${pageContext.request.contextPath}/ViewRequest?id=${req.requestId}">Xem</a></td>
                 </tr>
             </c:forEach>
         </table>
