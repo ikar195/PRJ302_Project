@@ -202,7 +202,7 @@ public class LeaveRequestDao {
                 return request;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Thêm log để debug
         }
         return null;
     }

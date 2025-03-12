@@ -29,10 +29,18 @@ public class ViewRequestServlet extends HttpServlet {
             return;
         }
 
-        int requestId = Integer.parseInt(requestIdParam);
+        int requestId;
+        try {
+            requestId = Integer.parseInt(requestIdParam);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("ListRequests");
+            return;
+        }
+
         LeaveRequest leaveRequest = leaveRequestDAO.getLeaveRequestById(requestId);
         if (leaveRequest == null) {
-            response.sendRedirect("ListRequests");
+            request.setAttribute("error", "Không tìm thấy đơn xin nghỉ!");
+            request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
             return;
         }
 
@@ -58,7 +66,14 @@ public class ViewRequestServlet extends HttpServlet {
             return;
         }
 
-        int requestId = Integer.parseInt(requestIdParam);
+        int requestId;
+        try {
+            requestId = Integer.parseInt(requestIdParam);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("ListRequests");
+            return;
+        }
+
         String status = "Approved".equals(action) ? "Approved" : "Rejected";
         leaveRequestDAO.updateLeaveRequestStatus(requestId, status, user.getUserId());
 
