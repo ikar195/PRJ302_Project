@@ -117,12 +117,19 @@
                     <p><i class="fas fa-calendar-alt"></i><span>Ngày kết thúc:</span> <fmt:formatDate value="${requestScope.request.endDate}" pattern="dd/MM/yyyy"/></p>
                     <p><i class="fas fa-file-alt"></i><span>Lý do:</span> ${requestScope.request.reason}</p>
                     <p><i class="fas fa-info-circle"></i><span>Trạng thái:</span> ${requestScope.request.status}</p>
+                            <c:if test="${requestScope.request.status != 'Inprogress' and not empty requestScope.request.comment}">
+                        <p><i class="fas fa fa-comment"></i><span>Comment:</span> ${requestScope.request.comment}</p>
+                            </c:if>    
                 </div>
                 <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.departmentName.contains('Manager')}">
                     <c:if test="${requestScope.request.status == 'Inprogress'}">
                         <form action="ViewRequest" method="post">
                             <input type="hidden" name="requestId" value="${requestScope.request.requestId}">
                             <input type="hidden" name="page" value="${requestScope.currentPage}">
+                            <div class="form-group">
+                                <label for="comment">Comment:</label>
+                                <textarea id="comment" name="comment" rows="4" cols="50" placeholder="Nhập nhận xét (tùy chọn)"></textarea>
+                            </div>
                             <div class="button-group">
                                 <button type="submit" name="action" value="Approved" class="button approve"><i class="fas fa-check"></i> Phê duyệt</button>
                                 <button type="submit" name="action" value="Rejected" class="button reject"><i class="fas fa-times"></i> Từ chối</button>

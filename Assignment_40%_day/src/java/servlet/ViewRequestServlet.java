@@ -66,6 +66,7 @@ public class ViewRequestServlet extends HttpServlet {
 
         String requestIdParam = request.getParameter("requestId");
         String action = request.getParameter("action");
+        String comment = request.getParameter("comment");
         String currentPage = request.getParameter("page");
 
         if (requestIdParam == null || action == null) {
@@ -82,7 +83,7 @@ public class ViewRequestServlet extends HttpServlet {
         }
 
         String status = "Approved".equals(action) ? "Approved" : "Rejected";
-        leaveRequestDAO.updateLeaveRequestStatus(requestId, status, user.getUserId());
+        leaveRequestDAO.updateLeaveRequestStatus(requestId, status, user.getUserId(),comment);
 
         response.sendRedirect("ListRequests?page=" + (currentPage != null ? currentPage : "1"));
     }

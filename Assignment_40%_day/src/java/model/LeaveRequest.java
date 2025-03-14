@@ -20,7 +20,7 @@ public class LeaveRequest {
     private Date createdDate;
     private String fullName;
     private String departmentName;
-
+private String comment;
     public LeaveRequest() {
     }
     
@@ -35,6 +35,14 @@ public class LeaveRequest {
         this.reason = reason;
         this.status = status;
         this.createdDate = createdDate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getFullName() {

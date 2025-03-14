@@ -210,7 +210,7 @@ public class LeaveRequestDao {
         return null;
     }
     
-    public void updateLeaveRequestStatus(int requestId, String status, int approverId) {
+    public void updateLeaveRequestStatus(int requestId, String status, int approverId, String comment) {
         String sql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
         try (Connection conn = DBContext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -218,11 +218,12 @@ public class LeaveRequestDao {
             stmt.setInt(2, requestId);
             stmt.executeUpdate();
 
-            String approvalSql = "INSERT INTO LeaveApprovals (RequestID, ApproverID, ApprovalStatus) VALUES (?, ?, ?)";
+            String approvalSql = "INSERT INTO LeaveApprovals (RequestID, ApproverID, ApprovalStatus,Comment) VALUES (?, ?, ?, ?)";
             try (PreparedStatement approvalStmt = conn.prepareStatement(approvalSql)) {
                 approvalStmt.setInt(1, requestId);
                 approvalStmt.setInt(2, approverId);
                 approvalStmt.setString(3, status);
+                approvalStmt.setString(4, comment);
                 approvalStmt.executeUpdate();
             }
         } catch (SQLException e) {
