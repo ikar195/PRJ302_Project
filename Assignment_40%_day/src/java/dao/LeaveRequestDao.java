@@ -178,37 +178,38 @@ public class LeaveRequestDao {
         return 0;
     }
     public LeaveRequest getLeaveRequestById(int requestId) {
-        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
-                     "FROM LeaveRequests lr " +
-                     "JOIN Users u ON lr.UserID = u.UserID " +
-                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
-                     "WHERE lr.RequestID = ?";
-        LeaveRequest request = null;
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, requestId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                request = new LeaveRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getDate("StartDate"),
-                    rs.getDate("EndDate"),
-                    rs.getString("Reason"),
-                    rs.getString("Status"),
-                    rs.getTimestamp("CreatedDate")
-                );
-                request.setFullName(rs.getString("FullName"));
-                request.setDepartmentName(rs.getString("DepartmentName"));
-                return request;
-            }
-        } catch (SQLException e) {
-            System.err.println("SQL Error: " + e.getMessage());
-    throw new RuntimeException(e);
+    String sql = "SELECT lr.*, u.FullName, d.DepartmentName, la.Comment " +
+                 "FROM LeaveRequests lr " +
+                 "JOIN Users u ON lr.UserID = u.UserID " +
+                 "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
+                 "LEFT JOIN LeaveApprovals la ON lr.RequestID = la.RequestID " +
+                 "WHERE lr.RequestID = ?";
+    LeaveRequest request = null;
+    try (Connection conn = DBContext.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, requestId);
+        ResultSet rs = stmt.executeQuery();
+        
+        if (rs.next()) { // Chỉ cần kiểm tra một lần vì RequestID duy nhất
+            request = new LeaveRequest(
+                rs.getInt("RequestID"),
+                rs.getInt("UserID"),
+                rs.getDate("StartDate"),
+                rs.getDate("EndDate"),
+                rs.getString("Reason"),
+                rs.getString("Status"),
+                rs.getTimestamp("CreatedDate")
+            );
+            request.setFullName(rs.getString("FullName"));
+            request.setDepartmentName(rs.getString("DepartmentName"));
+            request.setComment(rs.getString("Comment"));
         }
-        return null;
+    } catch (SQLException e) {
+        System.err.println("SQL Error: " + e.getMessage());
+        throw new RuntimeException(e);
     }
+    return request; // Trả về request, có thể null nếu không tìm thấy
+}
     
     public void updateLeaveRequestStatus(int requestId, String status, int approverId, String comment) {
         String sql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
