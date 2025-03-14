@@ -101,6 +101,22 @@
                 width: 100%;
                 margin-top: auto;
             }
+            .input-box {
+                padding: 10px;
+                margin: 5px 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                resize: none;
+            }
+            .status-approved {
+                color: #4CAF50; /* Màu xanh cho Approved */
+                font-weight: bold;
+            }
+            .status-rejected {
+                color: #f44336; /* Màu đỏ cho Rejected */
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -116,9 +132,21 @@
                     <p><i class="fas fa-calendar-alt"></i><span>Ngày bắt đầu:</span> <fmt:formatDate value="${requestScope.request.startDate}" pattern="dd/MM/yyyy"/></p>
                     <p><i class="fas fa-calendar-alt"></i><span>Ngày kết thúc:</span> <fmt:formatDate value="${requestScope.request.endDate}" pattern="dd/MM/yyyy"/></p>
                     <p><i class="fas fa-file-alt"></i><span>Lý do:</span> ${requestScope.request.reason}</p>
-                    <p><i class="fas fa-info-circle"></i><span>Trạng thái:</span> ${requestScope.request.status}</p>
-                            <c:if test="${requestScope.request.status != 'Inprogress' and not empty requestScope.request.comment}">
-                        <p><i class="fas fa fa-comment"></i><span>Comment:</span> ${requestScope.request.comment}</p>
+                    <p><i class="fas fa-info-circle"></i><span>Trạng thái:</span>
+                            <c:choose>
+                                <c:when test="${requestScope.request.status == 'Approved'}">
+                                <span class="status-approved">${requestScope.request.status}</span>
+                            </c:when>
+                            <c:when test="${requestScope.request.status == 'Rejected'}">
+                                <span class="status-rejected">${requestScope.request.status}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span>${requestScope.request.status}</span>
+                            </c:otherwise>
+                        </c:choose>
+                    </p>
+                    <c:if test="${requestScope.request.status != 'Inprogress' and not empty requestScope.request.comment}">
+                        <p ><i class="fas fa fa-comment"></i><span>Comment:</span> ${requestScope.request.comment}</p>
                             </c:if>    
                 </div>
                 <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.departmentName.contains('Manager')}">
@@ -126,9 +154,9 @@
                         <form action="ViewRequest" method="post">
                             <input type="hidden" name="requestId" value="${requestScope.request.requestId}">
                             <input type="hidden" name="page" value="${requestScope.currentPage}">
-                            <div class="form-group">
-                                <label for="comment">Comment:</label>
-                                <textarea id="comment" name="comment" rows="4" cols="50" placeholder="Nhập nhận xét (tùy chọn)"></textarea>
+                            <div class="info-group">
+                                <span for="comment">Comment:</span>
+                                <textarea id="comment" name="comment" class="input-box" rows="4" cols="50" placeholder="Nhập nhận xét (có thể không nhập)" maxlength="200"></textarea>
                             </div>
                             <div class="button-group">
                                 <button type="submit" name="action" value="Approved" class="button approve"><i class="fas fa-check"></i> Phê duyệt</button>
@@ -143,7 +171,7 @@
             </c:if>
 
             <div class="button-group">
-                <a href="${pageContext.request.contextPath}/ListRequests?page=${requestScope.currentPage}" class="button home"><i class="fas fa-home"></i> Home</a>
+                <a href="${pageContext.request.contextPath}/ListRequests?page=${requestScope.currentPage}" class="button home"><i class="fas fa-chevron-left"></i> Quay lại</a>
             </div>
         </div>
         <div class="footer">
