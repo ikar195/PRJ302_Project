@@ -138,7 +138,7 @@
                                 <c:when test="${req.status == 'Approved'}">
                                 <span class="status-approved">${req.status}</span>
                             </c:when>
-                            <c:when test="${requestScope.request.status == 'Rejected'}">
+                            <c:when test="${req.status == 'Rejected'}">
                                 <span class="status-rejected">${req.status}</span>
                             </c:when>
                             <c:otherwise>
