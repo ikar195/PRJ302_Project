@@ -80,6 +80,18 @@
             .home:hover {
                 background-color: #45a049;
             }
+            .approve {
+                background-color: #4CAF50;
+            }
+            .approve:hover {
+                background-color: #45a049;
+            }
+            .reject {
+                background-color: #f44336;
+            }
+            .reject:hover {
+                background-color: #e53935;
+            }
             .footer {
                 background-color: #333;
                 color: white;
@@ -106,6 +118,16 @@
                     <p><i class="fas fa-file-alt"></i><span>Lý do:</span> ${requestScope.request.reason}</p>
                     <p><i class="fas fa-info-circle"></i><span>Trạng thái:</span> ${requestScope.request.status}</p>
                 </div>
+                <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.departmentName.contains('Manager')}">
+                    <form action="ViewRequest" method="post">
+                        <input type="hidden" name="requestId" value="${requestScope.request.requestId}">
+                        <input type="hidden" name="page" value="${requestScope.currentPage}">
+                        <div class="button-group">
+                            <button type="submit" name="action" value="Approved" class="button approve"><i class="fas fa-check"></i> Phê duyệt</button>
+                            <button type="submit" name="action" value="Rejected" class="button reject"><i class="fas fa-times"></i> Từ chối</button>
+                        </div>
+                    </form>
+                </c:if>
             </c:if>
             <c:if test="${empty requestScope.request}">
                 <p style="color: red;">Không có dữ liệu đơn xin nghỉ!</p>
