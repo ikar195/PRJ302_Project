@@ -93,4 +93,43 @@ public class UserDBContext extends DBContext {
         }
         return users;
     }
+    // lấy toàn bộ user trong hệ thống
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT u.*, r.RoleName, d.DepartmentName " +
+                     "FROM Users u " +
+                     "LEFT JOIN UserRoles ur ON u.UserID = ur.UserID " +
+                     "LEFT JOIN Roles r ON ur.RoleID = r.RoleID " +
+                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            User currentUser = null;
+            List<String> roles = new ArrayList<>();
+            while (rs.next()) {
+                int userId = rs.getInt("UserID");
+                if (currentUser == null || currentUser.getUserId() != userId) {
+                    if (currentUser != null) users.add(currentUser);
+                    roles = new ArrayList<>();
+                    currentUser = new User(
+                        userId,
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getString("FullName"),
+                        rs.getString("Email"),
+                        rs.getInt("DepartmentID"),
+                        rs.getInt("ManagerID") == 0 ? null : rs.getInt("ManagerID"),
+                        roles,
+                        rs.getString("DepartmentName")
+                    );
+                }
+                String role = rs.getString("RoleName");
+                if (role != null) roles.add(role);
+            }
+            if (currentUser != null) users.add(currentUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
 }

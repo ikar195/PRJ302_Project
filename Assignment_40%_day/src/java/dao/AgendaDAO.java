@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Date;
 
 public class AgendaDAO {
+    //by Department
     public Map<Integer, Map<Date, String>> getAgenda(int departmentId, Date startDate, Date endDate) {
         Map<Integer, Map<Date, String>> agenda = new HashMap<>();
         String sql = "SELECT a.UserID, a.Date, a.Status FROM Agenda a " +
@@ -17,6 +18,27 @@ public class AgendaDAO {
             stmt.setInt(1, departmentId);
             stmt.setDate(2, new java.sql.Date(startDate.getTime()));
             stmt.setDate(3, new java.sql.Date(endDate.getTime()));
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int userId = rs.getInt("UserID");
+                Date date = rs.getDate("Date");
+                String status = rs.getString("Status");
+                agenda.computeIfAbsent(userId, k -> new HashMap<>()).put(date, status);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return agenda;
+    }
+    //all
+    public Map<Integer, Map<Date, String>> getAllAgendas(Date startDate, Date endDate) {
+        Map<Integer, Map<Date, String>> agenda = new HashMap<>();
+        String sql = "SELECT a.UserID, a.Date, a.Status FROM Agenda a " +
+                     "WHERE a.Date BETWEEN ? AND ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, new java.sql.Date(startDate.getTime()));
+            stmt.setDate(2, new java.sql.Date(endDate.getTime()));
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 int userId = rs.getInt("UserID");
