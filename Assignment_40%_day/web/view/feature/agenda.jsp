@@ -178,7 +178,7 @@
                                     <td>${emp.fullName}</td>
                                     <c:forEach var="i" begin="0" end="${(endDate.time - startDate.time) / (1000 * 60 * 60 * 24)}">
                                         <c:set var="currentDate" value="<%= new java.util.Date(((java.util.Date)request.getAttribute(\"startDate\")).getTime() + ((Integer)pageContext.getAttribute(\"i\")).longValue() * 24 * 60 * 60 * 1000) %>" />
-                                        <c:set var="status" value="${agenda[emp.userId][currentDate] != null ? agenda[emp.userId][currentDate] : 'Working'}"/>
+                                        <c:set var="status" value="${agenda[emp.userId][currentDate] != null ? agenda[emp.userId][currentDate] : 'working'}"/>
                                         <td class="${status == 'OnLeave' ? 'leave' : 'working'}"></td>
                                     </c:forEach>
                                 </tr>
