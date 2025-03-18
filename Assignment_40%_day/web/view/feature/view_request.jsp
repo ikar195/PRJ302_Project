@@ -149,7 +149,7 @@
                         <p ><i class="fas fa fa-comment"></i><span>Comment:</span> ${requestScope.request.comment}</p>
                             </c:if>    
                 </div>
-                <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.departmentName.contains('Manager')}">
+               <c:if test="${(sessionScope.user.roles.contains('Manager') || sessionScope.user.departmentName.contains('Manager')) && sessionScope.user.userId != requestScope.request.userID}">
                     <c:if test="${requestScope.request.status == 'Inprogress'}">
                         <form action="ViewRequest" method="post">
                             <input type="hidden" name="requestId" value="${requestScope.request.requestId}">

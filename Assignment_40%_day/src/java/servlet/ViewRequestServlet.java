@@ -59,7 +59,7 @@ public class ViewRequestServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null || (!user.getRoles().contains("Manager") && !user.getDepartmentName().contains("Manager"))) {
+        if (user == null) {
             response.sendRedirect("ListRequests");
             return;
         }
@@ -82,8 +82,25 @@ public class ViewRequestServlet extends HttpServlet {
             return;
         }
 
+        LeaveRequest leaveRequest = leaveRequestDAO.getLeaveRequestById(requestId); //lay thong tin don xin nghi
+        if (leaveRequest == null) {
+            response.sendRedirect("ListRequests");
+            return;
+        }
+
+        boolean isCreator = user.getUserId() == leaveRequest.getUserID(); //ktra quyen
+        boolean isManagerRole = user.getRoles().contains("Manager");
+        boolean isManagerDept = user.getDepartmentName().contains("Manager");
+
+        if (isCreator || ((!isManagerRole && !isManagerDept))) {
+            request.setAttribute("error", "Bạn không có quyền phê duyệt đơn này.");
+            request.setAttribute("request", leaveRequest);
+            request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
+            return;
+        }
+
         String status = "Approved".equals(action) ? "Approved" : "Rejected";
-        leaveRequestDAO.updateLeaveRequestStatus(requestId, status, user.getUserId(),comment);
+        leaveRequestDAO.updateLeaveRequestStatus(requestId, status, user.getUserId(), comment);
 
         response.sendRedirect("ListRequests?page=" + (currentPage != null ? currentPage : "1"));
     }
