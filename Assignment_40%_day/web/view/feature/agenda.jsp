@@ -160,7 +160,7 @@
                     <button type="submit" class="action-btn">Xem Agenda</button>
                 </div>
             </form>
-            <c:if test="${not empty agenda && not empty startDate && not empty endDate}">
+            <c:if test="${not empty startDate && not empty endDate && not empty users}">
                 <div class="table-wrapper">
                     <table class="agenda-table">
                         <thead>
