@@ -92,7 +92,7 @@ public class ViewRequestServlet extends HttpServlet {
         boolean isManagerRole = user.getRoles().contains("Manager");
         boolean isManagerDept = user.getDepartmentName().contains("Manager");
 
-        if (isCreator || ((!isManagerRole && !isManagerDept))) {
+        if ((isCreator && isManagerDept) ||(!isManagerRole && !isManagerDept)) {
             request.setAttribute("error", "Bạn không có quyền phê duyệt đơn này.");
             request.setAttribute("request", leaveRequest);
             request.getRequestDispatcher("/view/feature/view_request.jsp").forward(request, response);
