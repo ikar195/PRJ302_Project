@@ -31,7 +31,7 @@ public class AgendaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null || (!user.getRoles().contains("Manager") && !user.getDepartmentName().contains("Manager"))) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("login");
             return;
         }
         try {
@@ -39,6 +39,11 @@ public class AgendaServlet extends HttpServlet {
             java.util.Date startDate = sdf.parse(request.getParameter("startDate"));
             java.util.Date endDate = sdf.parse(request.getParameter("endDate"));
 
+            if (endDate.before(startDate)) {
+                request.setAttribute("error", "Ngày kết thúc không thể trước ngày bắt đầu");
+                request.getRequestDispatcher("/view/feature/agenda.jsp").forward(request, response);
+                return;
+            }
             // Kiểm tra xem user thuộc department "Manager" hay không
             boolean isManagerDepartment = user.getDepartmentName() != null && user.getDepartmentName().contains("Manager");
 

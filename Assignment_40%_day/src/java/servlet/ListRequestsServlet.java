@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import model.LeaveRequest;
 import model.User;
@@ -22,7 +21,7 @@ public class ListRequestsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("login");
             return;
         }
 
@@ -66,16 +65,13 @@ public class ListRequestsServlet extends HttpServlet {
         }
 
         // Sắp xếp toàn bộ danh sách: "Inprogress" lên đầu
-        Collections.sort(allRequests, new Comparator<LeaveRequest>() {
-            @Override
-            public int compare(LeaveRequest r1, LeaveRequest r2) {
-                if ("Inprogress".equals(r1.getStatus())) {
-                    return -1; // r1 lên trước nếu là "Inprogress"
-                } else if ("Inprogress".equals(r2.getStatus())) {
-                    return 1; // r2 lên trước nếu là "Inprogress"
-                }
-                return 0; // Giữ nguyên thứ tự nếu không có "Inprogress"
+        Collections.sort(allRequests, (LeaveRequest r1, LeaveRequest r2) -> {
+            if ("Inprogress".equals(r1.getStatus())) {
+                return -1;
+            } else if ("Inprogress".equals(r2.getStatus())) {
+                return 1;
             }
+            return 0; // Giữ nguyên thứ tự nếu không có "Inprogress"
         });
 
         // Phân trang thủ công

@@ -32,7 +32,7 @@ public class CreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            response.sendRedirect("LoginServlet");
+            response.sendRedirect("login");
             return;
         }
         try {
