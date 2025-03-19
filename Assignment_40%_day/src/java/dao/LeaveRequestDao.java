@@ -8,10 +8,10 @@ import model.LeaveRequest;
 import java.util.logging.Logger;
 
 public class LeaveRequestDao {
+
     public void createLeaveRequest(LeaveRequest request) {
         String sql = "INSERT INTO LeaveRequests (UserID, StartDate, EndDate, Reason, Status) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, request.getUserID());
             stmt.setDate(2, new java.sql.Date(request.getStartDate().getTime()));
             stmt.setDate(3, new java.sql.Date(request.getEndDate().getTime()));
@@ -27,26 +27,25 @@ public class LeaveRequestDao {
     public List<LeaveRequest> getLeaveRequestsByUser(int page, int pageSize) {
         List<LeaveRequest> requests = new ArrayList<>();
         String sql = """
-                     SELECT lr.*, u.FullName, d.DepartmentName FROM LeaveRequests lr 
-                     JOIN Users u ON lr.UserID = u.UserID 
-                                          JOIN Departments d ON u.DepartmentID = d.DepartmentID 
-                                          WHERE lr.UserID = u.UserID 
-                                          ORDER BY lr.RequestID
-                                          OFFSET ? ROWS FETCH NEXT ? ROWS ONLY""";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+                 SELECT lr.*, u.FullName, d.DepartmentName FROM LeaveRequests lr 
+                 JOIN Users u ON lr.UserID = u.UserID 
+                 JOIN Departments d ON u.DepartmentID = d.DepartmentID 
+                 WHERE lr.UserID = u.UserID 
+                 ORDER BY CASE WHEN lr.Status = 'Inprogress' THEN 0 ELSE 1 END, lr.RequestID
+                 OFFSET ? ROWS FETCH NEXT ? ROWS ONLY""";
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, (page - 1) * pageSize); // Offset bắt đầu từ 0
             stmt.setInt(2, pageSize);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 LeaveRequest request = new LeaveRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getDate("StartDate"),
-                    rs.getDate("EndDate"),
-                    rs.getString("Reason"),
-                    rs.getString("Status"),
-                    rs.getTimestamp("CreatedDate")
+                        rs.getInt("RequestID"),
+                        rs.getInt("UserID"),
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
+                        rs.getString("Reason"),
+                        rs.getString("Status"),
+                        rs.getTimestamp("CreatedDate")
                 );
                 request.setFullName(rs.getString("FullName"));
                 request.setDepartmentName(rs.getString("DepartmentName"));
@@ -61,28 +60,27 @@ public class LeaveRequestDao {
     // Lấy đơn theo user với phân trang
     public List<LeaveRequest> getLeaveRequestsByUser(int userID, int page, int pageSize) {
         List<LeaveRequest> requests = new ArrayList<>();
-        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
-                     "FROM LeaveRequests lr " +
-                     "JOIN Users u ON lr.UserID = u.UserID " +
-                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
-                     "WHERE lr.UserID = ? " +
-                     "ORDER BY lr.RequestID " +
-                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName "
+                + "FROM LeaveRequests lr "
+                + "JOIN Users u ON lr.UserID = u.UserID "
+                + "JOIN Departments d ON u.DepartmentID = d.DepartmentID "
+                + "WHERE lr.UserID = ? "
+                + "ORDER BY CASE WHEN lr.Status = 'Inprogress' THEN 0 ELSE 1 END, lr.RequestID "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             stmt.setInt(2, (page - 1) * pageSize); // Offset bắt đầu từ 0
             stmt.setInt(3, pageSize);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 LeaveRequest request = new LeaveRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getDate("StartDate"),
-                    rs.getDate("EndDate"),
-                    rs.getString("Reason"),
-                    rs.getString("Status"),
-                    rs.getTimestamp("CreatedDate")
+                        rs.getInt("RequestID"),
+                        rs.getInt("UserID"),
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
+                        rs.getString("Reason"),
+                        rs.getString("Status"),
+                        rs.getTimestamp("CreatedDate")
                 );
                 request.setFullName(rs.getString("FullName"));
                 request.setDepartmentName(rs.getString("DepartmentName"));
@@ -97,28 +95,27 @@ public class LeaveRequestDao {
     // Lấy đơn theo phòng ban với phân trang
     public List<LeaveRequest> getLeaveRequestsByDepartment(int departmentId, int page, int pageSize) {
         List<LeaveRequest> requests = new ArrayList<>();
-        String sql = "SELECT lr.*, u.FullName, d.DepartmentName " +
-                     "FROM LeaveRequests lr " +
-                     "JOIN Users u ON lr.UserID = u.UserID " +
-                     "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
-                     "WHERE u.DepartmentID = ? " +
-                     "ORDER BY lr.RequestID " +
-                     "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName "
+                + "FROM LeaveRequests lr "
+                + "JOIN Users u ON lr.UserID = u.UserID "
+                + "JOIN Departments d ON u.DepartmentID = d.DepartmentID "
+                + "WHERE u.DepartmentID = ? "
+                + "ORDER BY CASE WHEN lr.Status = 'Inprogress' THEN 0 ELSE 1 END, lr.RequestID "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, departmentId);
             stmt.setInt(2, (page - 1) * pageSize);
             stmt.setInt(3, pageSize);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 LeaveRequest request = new LeaveRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getDate("StartDate"),
-                    rs.getDate("EndDate"),
-                    rs.getString("Reason"),
-                    rs.getString("Status"),
-                    rs.getTimestamp("CreatedDate")
+                        rs.getInt("RequestID"),
+                        rs.getInt("UserID"),
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
+                        rs.getString("Reason"),
+                        rs.getString("Status"),
+                        rs.getTimestamp("CreatedDate")
                 );
                 request.setFullName(rs.getString("FullName"));
                 request.setDepartmentName(rs.getString("DepartmentName"));
@@ -133,8 +130,7 @@ public class LeaveRequestDao {
     // Lấy tổng số đơn theo user
     public int getTotalLeaveRequestsByUser(int userID) {
         String sql = "SELECT COUNT(*) FROM LeaveRequests WHERE UserID = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -145,10 +141,10 @@ public class LeaveRequestDao {
         }
         return 0;
     }
+
     public int getTotalLeaveRequestsByUser() {
         String sql = "SELECT COUNT(*) FROM LeaveRequests";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -161,12 +157,11 @@ public class LeaveRequestDao {
 
     // Lấy tổng số đơn theo phòng ban
     public int getTotalLeaveRequestsByDepartment(int departmentId) {
-        String sql = "SELECT COUNT(*) " +
-                     "FROM LeaveRequests lr " +
-                     "JOIN Users u ON lr.UserID = u.UserID " +
-                     "WHERE u.DepartmentID = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT COUNT(*) "
+                + "FROM LeaveRequests lr "
+                + "JOIN Users u ON lr.UserID = u.UserID "
+                + "WHERE u.DepartmentID = ?";
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, departmentId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -177,44 +172,43 @@ public class LeaveRequestDao {
         }
         return 0;
     }
+
     public LeaveRequest getLeaveRequestById(int requestId) {
-    String sql = "SELECT lr.*, u.FullName, d.DepartmentName, la.Comment " +
-                 "FROM LeaveRequests lr " +
-                 "JOIN Users u ON lr.UserID = u.UserID " +
-                 "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
-                 "LEFT JOIN LeaveApprovals la ON lr.RequestID = la.RequestID " +
-                 "WHERE lr.RequestID = ?";
-    LeaveRequest request = null;
-    try (Connection conn = DBContext.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, requestId);
-        ResultSet rs = stmt.executeQuery();
-        
-        if (rs.next()) { // Chỉ cần kiểm tra một lần vì RequestID duy nhất
-            request = new LeaveRequest(
-                rs.getInt("RequestID"),
-                rs.getInt("UserID"),
-                rs.getDate("StartDate"),
-                rs.getDate("EndDate"),
-                rs.getString("Reason"),
-                rs.getString("Status"),
-                rs.getTimestamp("CreatedDate")
-            );
-            request.setFullName(rs.getString("FullName"));
-            request.setDepartmentName(rs.getString("DepartmentName"));
-            request.setComment(rs.getString("Comment"));
+        String sql = "SELECT lr.*, u.FullName, d.DepartmentName, la.Comment "
+                + "FROM LeaveRequests lr "
+                + "JOIN Users u ON lr.UserID = u.UserID "
+                + "JOIN Departments d ON u.DepartmentID = d.DepartmentID "
+                + "LEFT JOIN LeaveApprovals la ON lr.RequestID = la.RequestID "
+                + "WHERE lr.RequestID = ?";
+        LeaveRequest request = null;
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, requestId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) { // Chỉ cần kiểm tra một lần vì RequestID duy nhất
+                request = new LeaveRequest(
+                        rs.getInt("RequestID"),
+                        rs.getInt("UserID"),
+                        rs.getDate("StartDate"),
+                        rs.getDate("EndDate"),
+                        rs.getString("Reason"),
+                        rs.getString("Status"),
+                        rs.getTimestamp("CreatedDate")
+                );
+                request.setFullName(rs.getString("FullName"));
+                request.setDepartmentName(rs.getString("DepartmentName"));
+                request.setComment(rs.getString("Comment"));
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL Error: " + e.getMessage());
+            throw new RuntimeException(e);
         }
-    } catch (SQLException e) {
-        System.err.println("SQL Error: " + e.getMessage());
-        throw new RuntimeException(e);
+        return request; // Trả về request, có thể null nếu không tìm thấy
     }
-    return request; // Trả về request, có thể null nếu không tìm thấy
-}
-    
+
     public void updateLeaveRequestStatus(int requestId, String status, int approverId, String comment) {
         String sql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
-        try (Connection conn = DBContext.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, status);
             stmt.setInt(2, requestId);
             stmt.executeUpdate();
