@@ -7,7 +7,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import model.LeaveRequest;
 import model.User;
 
 @WebServlet("/ListRequests")
@@ -45,6 +48,18 @@ public class ListRequestsServlet extends HttpServlet {
             requests = leaveRequestDAO.getLeaveRequestsByUser(page, pageSize);
             totalRecords = leaveRequestDAO.getTotalLeaveRequestsByUser();
         }
+        
+        Collections.sort(requests, new Comparator<LeaveRequest>() {
+            @Override
+            public int compare(LeaveRequest r1, LeaveRequest r2) {
+                if ("Inprogress".equals(r1.getStatus())) {
+                    return -1; // r1 lên trước nếu là "Inprogress"
+                } else if ("Inprogress".equals(r2.getStatus())) {
+                    return 1; // r2 lên trước nếu là "Inprogress"
+                }
+                return 0; // Giữ nguyên thứ tự nếu không có "Inprogress"
+            }
+        });
 
         // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
