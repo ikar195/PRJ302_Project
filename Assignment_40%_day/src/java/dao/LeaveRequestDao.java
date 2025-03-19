@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.LeaveRequest;
-import java.util.logging.Logger;
+import dao.AgendaDAO;
 
 public class LeaveRequestDao {
 
@@ -207,22 +207,42 @@ public class LeaveRequestDao {
     }
 
     public void updateLeaveRequestStatus(int requestId, String status, int approverId, String comment) {
-        String sql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
-        try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, status);
-            stmt.setInt(2, requestId);
-            stmt.executeUpdate();
+    String updateLeaveRequestSql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
+    String insertApprovalSql = "INSERT INTO LeaveApprovals (RequestID, ApproverID, ApprovalStatus, Comment) VALUES (?, ?, ?, ?)";
 
-            String approvalSql = "INSERT INTO LeaveApprovals (RequestID, ApproverID, ApprovalStatus,Comment) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement approvalStmt = conn.prepareStatement(approvalSql)) {
-                approvalStmt.setInt(1, requestId);
-                approvalStmt.setInt(2, approverId);
-                approvalStmt.setString(3, status);
-                approvalStmt.setString(4, comment);
-                approvalStmt.executeUpdate();
+    try (Connection conn = DBContext.getConnection()) {
+        conn.setAutoCommit(false); // Bắt đầu transaction
+
+        try (PreparedStatement updateLeaveStmt = conn.prepareStatement(updateLeaveRequestSql);
+             PreparedStatement insertApprovalStmt = conn.prepareStatement(insertApprovalSql)) {
+
+            // Cập nhật trạng thái đơn xin nghỉ
+            updateLeaveStmt.setString(1, status);
+            updateLeaveStmt.setInt(2, requestId);
+            updateLeaveStmt.executeUpdate();
+
+            // Ghi nhận phê duyệt
+            insertApprovalStmt.setInt(1, requestId);
+            insertApprovalStmt.setInt(2, approverId);
+            insertApprovalStmt.setString(3, status);
+            insertApprovalStmt.setString(4, comment);
+            insertApprovalStmt.executeUpdate();
+
+            // Nếu phê duyệt, cập nhật agenda
+            if ("Approved".equalsIgnoreCase(status)) {
+                AgendaDAO.updateAgendaForLeaveRequest(conn, requestId);
             }
+
+            conn.commit(); // Commit transaction nếu tất cả thành công
         } catch (SQLException e) {
-            e.printStackTrace();
+            conn.rollback(); // Rollback nếu có lỗi
+            throw new RuntimeException("Error processing leave request approval", e);
+        } finally {
+            conn.setAutoCommit(true); // Trả lại chế độ tự động commit
         }
+    } catch (SQLException e) {
+        throw new RuntimeException("Database error", e);
     }
+}
+
 }
