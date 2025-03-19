@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,23 +34,39 @@ public class ListRequestsServlet extends HttpServlet {
             page = Integer.parseInt(pageParam);
         }
 
-        // Lấy danh sách đơn và tổng số bản ghi
-        List requests;
+        // Lấy tổng số bản ghi
         int totalRecords;
         if (user.getRoles().contains("Manager")) {
-            requests = leaveRequestDAO.getLeaveRequestsByDepartment(user.getDepartmentId(), page, pageSize);
             totalRecords = leaveRequestDAO.getTotalLeaveRequestsByDepartment(user.getDepartmentId());
-        } 
-        else{
-            requests = leaveRequestDAO.getLeaveRequestsByUser(user.getUserId(), page, pageSize);
+        } else {
             totalRecords = leaveRequestDAO.getTotalLeaveRequestsByUser(user.getUserId());
         }
-        if (user.getDepartmentName().contains("Manager")){
-            requests = leaveRequestDAO.getLeaveRequestsByUser(page, pageSize);
+        if (user.getDepartmentName().contains("Manager")) {
             totalRecords = leaveRequestDAO.getTotalLeaveRequestsByUser();
         }
-        
-        Collections.sort(requests, new Comparator<LeaveRequest>() {
+
+        // Tính tổng số trang tạm thời để lấy toàn bộ dữ liệu
+        int totalPagesTemp = (int) Math.ceil((double) totalRecords / pageSize);
+
+        // Gộp toàn bộ danh sách từ các trang
+        List<LeaveRequest> allRequests = new ArrayList<>();
+        if (user.getRoles().contains("Manager")) {
+            for (int i = 1; i <= totalPagesTemp; i++) {
+                allRequests.addAll(leaveRequestDAO.getLeaveRequestsByDepartment(user.getDepartmentId(), i, pageSize));
+            }
+        } else {
+            for (int i = 1; i <= totalPagesTemp; i++) {
+                allRequests.addAll(leaveRequestDAO.getLeaveRequestsByUser(user.getUserId(), i, pageSize));
+            }
+        }
+        if (user.getDepartmentName().contains("Manager")) {
+            for (int i = 1; i <= totalPagesTemp; i++) {
+                allRequests.addAll(leaveRequestDAO.getLeaveRequestsByUser(i, pageSize));
+            }
+        }
+
+        // Sắp xếp toàn bộ danh sách: "Inprogress" lên đầu
+        Collections.sort(allRequests, new Comparator<LeaveRequest>() {
             @Override
             public int compare(LeaveRequest r1, LeaveRequest r2) {
                 if ("Inprogress".equals(r1.getStatus())) {
@@ -61,11 +78,14 @@ public class ListRequestsServlet extends HttpServlet {
             }
         });
 
-        // Tính tổng số trang
+        // Phân trang thủ công
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(startIndex + pageSize, totalRecords);
+        List<LeaveRequest> paginatedRequests = allRequests.subList(startIndex, endIndex);
 
         // Truyền dữ liệu tới JSP
-        request.setAttribute("requests", requests);
+        request.setAttribute("requests", paginatedRequests);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("pageSize", pageSize);
