@@ -11,6 +11,7 @@ import java.util.Date;
  * @author ducdo
  */
 public class LeaveRequest {
+
     private int requestId;
     private int userID;
     private Date startDate;
@@ -20,12 +21,19 @@ public class LeaveRequest {
     private Date createdDate;
     private String fullName;
     private String departmentName;
-private String comment;
+    private String comment;
+    private byte[] attachment;
+
+    public byte[] getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(byte[] attachment) {
+        this.attachment = attachment;
+    }
+
     public LeaveRequest() {
     }
-    
-
-
 
     public LeaveRequest(int requestId, int userID, Date startDate, Date endDate, String reason, String status, Date createdDate) {
         this.requestId = requestId;
@@ -60,8 +68,6 @@ private String comment;
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
-
-    
 
     public int getRequestId() {
         return requestId;
@@ -118,6 +124,5 @@ private String comment;
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
-    
-    
+
 }
