@@ -26,7 +26,7 @@
             }
             .container {
                 width: 400px;
-                height: 500px;
+                height: 550px;
                 background: linear-gradient(135deg, #ffffff, #f9f9f9);
                 padding: 30px;
                 border-radius: 12px;
@@ -111,7 +111,7 @@
         <div class="container">
             <h2>Đơn xin nghỉ phép</h2>
             <p><i class="fas fa-user"></i><b> ${sessionScope.user.fullName}</b><b> - ${sessionScope.user.departmentName}</b></p>
-            <form action="/Assignment_40%25_day/CreateRequest" method="post">
+            <form action="/Assignment_40%25_day/CreateRequest" method="post" enctype="multipart/form-data">
                 <div class="input-group">
                     <label for="from-date"><i class="fas fa-calendar-alt"></i> Từ ngày:</label>
                     <input type="date" id="from-date" name="startDate" class="input-box" required>
@@ -123,6 +123,10 @@
                 <div class="input-group">
                     <label for="reason"><i class="fas fa-file-alt"></i> Lý do:</label>
                     <textarea id="reason" name="reason" class="input-box" rows="4" placeholder="Nhập lý do nghỉ phép (tối đa 200 ký tự, ví dụ: ốm, việc gia đình)" maxlength="200" required></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="attachment"><i class="fas fa-paperclip"></i> Đính kèm file ảnh .jpg (nếu có):</label>
+                    <input type="file" id="attachment" name="attachment" class="input-box" accept="image/*">
                 </div>
                 <div class="button-group">
                     <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i>  Gửi</button>

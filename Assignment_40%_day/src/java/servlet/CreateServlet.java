@@ -5,6 +5,7 @@
 package servlet;
 import dao.LeaveRequestDao;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,11 @@ import model.User;
  * @author ducdo
  */
 @WebServlet("/CreateRequest")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 1, // 1MB (kích thước tối thiểu trước khi lưu tạm lên disk)
+    maxFileSize = 1024 * 1024 * 5,      // 5MB (kích thước tối đa của file)
+    maxRequestSize = 1024 * 1024 * 10   // 10MB (kích thước tối đa của request)
+)
 public class CreateServlet extends HttpServlet {
     private final LeaveRequestDao leaveRequestDAO = new LeaveRequestDao();
     @Override

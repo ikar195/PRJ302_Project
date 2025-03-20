@@ -147,7 +147,12 @@
                     </p>
                     <c:if test="${requestScope.request.status != 'Inprogress' and not empty requestScope.request.comment}">
                         <p ><i class="fas fa fa-comment"></i><span>Comment:</span> ${requestScope.request.comment}</p>
-                            </c:if>    
+                            </c:if>
+                            <c:if test="${not empty requestScope.request.attachment}">
+                        <p><i class="fas fa-paperclip"></i><span>Đính kèm:</span> 
+                            <a href="${pageContext.request.contextPath}/ImageServlet?requestId=${requestScope.request.requestId}" target="_blank" class="attachment-link">Xem file đính kèm</a>
+                        </p>
+                    </c:if>
                 </div>
                 <c:if test="${sessionScope.user.departmentName.contains('Manager') || (sessionScope.user.roles.contains('Manager') && sessionScope.user.userId != requestScope.request.userID)}">
                     <c:if test="${requestScope.request.status == 'Inprogress'}">
