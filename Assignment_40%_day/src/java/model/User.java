@@ -16,7 +16,6 @@ public class User {
     private String username;
     private String password;
     private String fullName;
-    private String email;
     private int departmentId;
     private Integer managerId;
     private List<String> roles;
@@ -24,12 +23,11 @@ public class User {
 
     public User() {}
 
-    public User(int userId, String username, String password, String fullName, String email, int departmentId, Integer managerId, List<String> roles, String departmentName) {
+    public User(int userId, String username, String password, String fullName, int departmentId, Integer managerId, List<String> roles, String departmentName) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
-        this.email = email;
         this.departmentId = departmentId;
         this.managerId = managerId;
         this.roles = roles;
@@ -67,14 +65,6 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public int getDepartmentId() {

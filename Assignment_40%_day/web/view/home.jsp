@@ -84,7 +84,7 @@
             <c:if test="${sessionScope.user.roles.contains('Manager') || sessionScope.user.roles.contains('Admin')}">
                 <a href="../Agenda"><i class="fas fa-calendar"></i> Xem Agenda nhân sự</a>
             </c:if>
-            <a href="../login"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+            <a href="../LogoutServlet"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
         </div>
         <div class="welcome-section">
             <h2>Chào mừng ${sessionScope.user.fullName} đến với hệ thống quản lý đơn nghỉ phép</h2>
