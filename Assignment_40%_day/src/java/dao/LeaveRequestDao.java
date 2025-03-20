@@ -10,13 +10,18 @@ import dao.AgendaDAO;
 public class LeaveRequestDao {
 
     public void createLeaveRequest(LeaveRequest request) {
-        String sql = "INSERT INTO LeaveRequests (UserID, StartDate, EndDate, Reason, Status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO LeaveRequests (UserID, StartDate, EndDate, Reason, Status, Attachment) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, request.getUserID());
             stmt.setDate(2, new java.sql.Date(request.getStartDate().getTime()));
             stmt.setDate(3, new java.sql.Date(request.getEndDate().getTime()));
             stmt.setString(4, request.getReason());
             stmt.setString(5, "Inprogress");
+            if (request.getAttachment() != null) {
+                stmt.setBytes(6, request.getAttachment()); // Lưu dữ liệu ảnh
+            } else {
+                stmt.setNull(6, java.sql.Types.VARBINARY); // Nếu không có ảnh
+            }
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -207,42 +212,41 @@ public class LeaveRequestDao {
     }
 
     public void updateLeaveRequestStatus(int requestId, String status, int approverId, String comment) {
-    String updateLeaveRequestSql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
-    String insertApprovalSql = "INSERT INTO LeaveApprovals (RequestID, ApproverID, ApprovalStatus, Comment) VALUES (?, ?, ?, ?)";
+        String updateLeaveRequestSql = "UPDATE LeaveRequests SET Status = ? WHERE RequestID = ?";
+        String insertApprovalSql = "INSERT INTO LeaveApprovals (RequestID, ApproverID, ApprovalStatus, Comment) VALUES (?, ?, ?, ?)";
 
-    try (Connection conn = DBContext.getConnection()) {
-        conn.setAutoCommit(false); // Bắt đầu transaction
+        try (Connection conn = DBContext.getConnection()) {
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
-        try (PreparedStatement updateLeaveStmt = conn.prepareStatement(updateLeaveRequestSql);
-             PreparedStatement insertApprovalStmt = conn.prepareStatement(insertApprovalSql)) {
+            try (PreparedStatement updateLeaveStmt = conn.prepareStatement(updateLeaveRequestSql); PreparedStatement insertApprovalStmt = conn.prepareStatement(insertApprovalSql)) {
 
-            // Cập nhật trạng thái đơn xin nghỉ
-            updateLeaveStmt.setString(1, status);
-            updateLeaveStmt.setInt(2, requestId);
-            updateLeaveStmt.executeUpdate();
+                // Cập nhật trạng thái đơn xin nghỉ
+                updateLeaveStmt.setString(1, status);
+                updateLeaveStmt.setInt(2, requestId);
+                updateLeaveStmt.executeUpdate();
 
-            // Ghi nhận phê duyệt
-            insertApprovalStmt.setInt(1, requestId);
-            insertApprovalStmt.setInt(2, approverId);
-            insertApprovalStmt.setString(3, status);
-            insertApprovalStmt.setString(4, comment);
-            insertApprovalStmt.executeUpdate();
+                // Ghi nhận phê duyệt
+                insertApprovalStmt.setInt(1, requestId);
+                insertApprovalStmt.setInt(2, approverId);
+                insertApprovalStmt.setString(3, status);
+                insertApprovalStmt.setString(4, comment);
+                insertApprovalStmt.executeUpdate();
 
-            // Nếu phê duyệt, cập nhật agenda
-            if ("Approved".equalsIgnoreCase(status)) {
-                AgendaDAO.updateAgendaForLeaveRequest(conn, requestId);
+                // Nếu phê duyệt, cập nhật agenda
+                if ("Approved".equalsIgnoreCase(status)) {
+                    AgendaDAO.updateAgendaForLeaveRequest(conn, requestId);
+                }
+
+                conn.commit(); // Commit transaction nếu tất cả thành công
+            } catch (SQLException e) {
+                conn.rollback(); // Rollback nếu có lỗi
+                throw new RuntimeException("Error processing leave request approval", e);
+            } finally {
+                conn.setAutoCommit(true); // Trả lại chế độ tự động commit
             }
-
-            conn.commit(); // Commit transaction nếu tất cả thành công
         } catch (SQLException e) {
-            conn.rollback(); // Rollback nếu có lỗi
-            throw new RuntimeException("Error processing leave request approval", e);
-        } finally {
-            conn.setAutoCommit(true); // Trả lại chế độ tự động commit
+            throw new RuntimeException("Database error", e);
         }
-    } catch (SQLException e) {
-        throw new RuntimeException("Database error", e);
     }
-}
 
 }
