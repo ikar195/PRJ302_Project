@@ -9,7 +9,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,11 +55,27 @@ public class CreateServlet extends HttpServlet {
                 return;
             }
             
+            //xu lý file dinh kem
+            byte[] attachment = null;
+            Part filePart = request.getPart("attachment");
+            if (filePart != null && filePart.getSize() > 0) {
+                try (InputStream inputStream = filePart.getInputStream()) {
+                    attachment = inputStream.readAllBytes(); // Đọc dữ liệu ảnh thành byte[]
+                }
+                // Kiểm tra kích thước (ví dụ: tối đa 5MB)
+                if (attachment.length > 5 * 1024 * 1024) {
+                    request.setAttribute("error", "File ảnh không được vượt quá 5MB");
+                    request.getRequestDispatcher("/view/feature/create_request.jsp").forward(request, response);
+                    return;
+                }
+            }
+            
             LeaveRequest leaveRequest = new LeaveRequest();
             leaveRequest.setUserID(user.getUserId());
             leaveRequest.setStartDate(startDate);
             leaveRequest.setEndDate(endDate);
             leaveRequest.setReason(request.getParameter("reason"));
+            leaveRequest.setAttachment(attachment);
             leaveRequestDAO.createLeaveRequest(leaveRequest);
             response.sendRedirect("ListRequests");
         } catch (IOException | ParseException e) {
