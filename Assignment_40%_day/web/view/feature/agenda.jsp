@@ -13,15 +13,19 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-            body {
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
                 font-family: 'Roboto', Arial, sans-serif;
                 background-color: #f4f4f9;
+                overflow: hidden; /* Ngăn cuộn toàn trang */
+            }
+
+            body {
                 display: flex;
                 flex-direction: column;
-                min-height: 100vh;
-                justify-content: center;
-                align-items: center;
-                margin: 0;
+                min-height: 100vh; /* Đảm bảo chiều cao tối thiểu là 100% viewport */
             }
 
             .container {
@@ -33,6 +37,10 @@
                 box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.15);
                 text-align: center;
                 margin: 20px auto;
+                flex-grow: 1; /* Cho phép container mở rộng */
+                overflow: hidden; /* Ngăn cuộn trong container */
+                display: flex;
+                flex-direction: column;
             }
 
             h2 {
@@ -70,18 +78,29 @@
                 font-size: 16px;
                 transition: background-color 0.3s;
                 text-decoration: none;
+                display: inline-block;
+                width: auto;
             }
             .action-btn:hover {
                 background-color: #45a049;
+            }
+            .button-wrapper {
+                display: inline-block; /* Giữ nút Home trong một khối không bị kéo dài */
+                margin-bottom: 15px;
             }
 
             /* Bọc table để có thể cuộn ngang + dọc */
             .table-wrapper {
                 width: 100%;
-                max-height: 400px;  /* Đặt chiều cao tối đa */
+                max-height: calc(100vh - 220px);
                 overflow: auto;     /* Cho phép cuộn cả ngang lẫn dọc */
                 margin: 20px 0;
                 border: 1px solid #ccc; /* Viền tùy chọn cho khung nhìn rõ hơn */
+                flex-grow: 1;
+                -ms-overflow-style: none; /*ẩn thanh cuộn trong edge */
+            }
+            .table-wrapper::-webkit-scrollbar {
+                display: none; /* Ẩn thanh cuộn trên Chrome, Safari, và các trình duyệt Webkit */
             }
 
             /* Table */
@@ -147,6 +166,7 @@
                 width: 100%;
                 margin-top: auto;
                 box-sizing: border-box;
+                flex-shrink: 0;
             }
         </style>
     </head>
@@ -156,7 +176,9 @@
             <c:if test="${not empty error}">
                 <p style="color: red; font-weight: bold;">${error}</p>
             </c:if>
-            <a href="/Assignment_40%25_day/view/home.jsp" class="action-btn"><i class="fas fa-home"></i> Home</a>
+            <div class="button-wrapper">
+                <a href="/Assignment_40%25_day/view/home.jsp" class="action-btn"><i class="fas fa-home"></i> Home</a>
+            </div>
             <form action="${pageContext.request.contextPath}/Agenda" method="post">
                 <div class="date-selection">
                     <label for="start-date"><i class="fas fa-calendar-alt"></i> Ngày bắt đầu: </label>

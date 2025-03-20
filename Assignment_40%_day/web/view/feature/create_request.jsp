@@ -42,7 +42,7 @@
                 font-size: 28px;
                 font-weight: 700;
                 color: #333;
-                margin-bottom: 3px;
+                margin-bottom: 1px;
             }
             p {
                 font-size: 16px;
@@ -54,11 +54,10 @@
                 flex-direction: column;
                 align-items: center;
                 width: 100%;
-                margin-bottom: 20px;
+                margin-bottom: 15px;
             }
             label {
                 font-size: 16px;
-                margin-bottom: 5px;
                 width: 90%;
                 text-align: left;
             }
@@ -77,7 +76,6 @@
                 display: flex;
                 justify-content: center;
                 gap: 15px;
-                margin-top: 4px;
             }
             .submit-btn {
                 background-color: #4CAF50;
@@ -105,12 +103,22 @@
                 width: 100%;
                 margin-top: auto;
             }
+            .user-info {
+                background-color: #e0e0e0; 
+                border: 1px solid #b0b0b0; 
+                border-radius: 20px; 
+                padding: 8px 15px;
+                display: inline-block; 
+                font-size: 14px; 
+                color: #454545;
+                text-align: center; 
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <h2>Đơn xin nghỉ phép</h2>
-            <p><i class="fas fa-user"></i><b> ${sessionScope.user.fullName}</b><b> - ${sessionScope.user.departmentName}</b></p>
+            <p class="user-info"><i class="fas fa-user"></i><b> ${sessionScope.user.fullName}</b><b> - ${sessionScope.user.departmentName}</b></p>
             <form action="/Assignment_40%25_day/CreateRequest" method="post" enctype="multipart/form-data">
                 <div class="input-group">
                     <label for="from-date"><i class="fas fa-calendar-alt"></i> Từ ngày:</label>

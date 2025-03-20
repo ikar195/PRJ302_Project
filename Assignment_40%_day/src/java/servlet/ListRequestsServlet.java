@@ -24,7 +24,7 @@ public class ListRequestsServlet extends HttpServlet {
 
         // Lấy tham số page từ request, mặc định là 1
         int page = 1;
-        int pageSize = 8; // Số bản ghi mỗi trang
+        int pageSize = 7; // Số bản ghi mỗi trang
         String pageParam = request.getParameter("page");
         if (pageParam != null && !pageParam.isEmpty()) {
             page = Integer.parseInt(pageParam);
