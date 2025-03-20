@@ -127,7 +127,10 @@
                 color: #fff;
             }
 
-            /* Màu cho các trạng thái ví dụ */
+            /* Màu cho các trạng thái */
+            .none {
+                background-color: #ffffff; /* Màu trắng */
+            }
             .working {
                 background-color: #00CC00;
             }
@@ -181,8 +184,19 @@
                                     <td>${emp.fullName}</td>
                                     <c:forEach var="i" begin="0" end="${(endDate.time - startDate.time) / (1000 * 60 * 60 * 24)}">
                                         <c:set var="currentDate" value="<%= new java.util.Date(((java.util.Date)request.getAttribute(\"startDate\")).getTime() + ((Integer)pageContext.getAttribute(\"i\")).longValue() * 24 * 60 * 60 * 1000) %>" />
-                                        <c:set var="status" value="${agenda[emp.userId][currentDate] != null ? agenda[emp.userId][currentDate] : 'working'}"/>
-                                        <td class="${status == 'OnLeave' ? 'leave' : 'working'}"></td>
+                                        <c:set var="today" value="<%= new java.util.Date() %>" />
+                                        <c:set var="status" value="${agenda[emp.userId][currentDate]}"/>
+                                        <c:choose>
+                                            <c:when test="${status == 'OnLeave'}">
+                                                <td class="leave"></td> <!-- Ngày nghỉ, kể cả trong tương lai -->
+                                            </c:when>
+                                            <c:when test="${currentDate.after(today)}">
+                                                <td class="none"></td> <!-- Ngày tương lai không có dữ liệu -->
+                                            </c:when>
+                                            <c:otherwise>
+                                                <td class="${status == 'Working' ? 'working' : 'working'}"></td> <!-- Ngày quá khứ/hiện tại -->
+                                            </c:otherwise>
+                                        </c:choose>
                                     </c:forEach>
                                 </tr>
                             </c:forEach>
