@@ -189,8 +189,7 @@ public class LeaveRequestDao {
         try (Connection conn = DBContext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, requestId);
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) { // Chỉ cần kiểm tra một lần vì RequestID duy nhất
+            if (rs.next()) {
                 request = new LeaveRequest(
                         rs.getInt("RequestID"),
                         rs.getInt("UserID"),
@@ -203,12 +202,13 @@ public class LeaveRequestDao {
                 request.setFullName(rs.getString("FullName"));
                 request.setDepartmentName(rs.getString("DepartmentName"));
                 request.setComment(rs.getString("Comment"));
+                request.setAttachment(rs.getBytes("Attachment")); // Lấy dữ liệu ảnh
             }
         } catch (SQLException e) {
             System.err.println("SQL Error: " + e.getMessage());
             throw new RuntimeException(e);
         }
-        return request; // Trả về request, có thể null nếu không tìm thấy
+        return request;
     }
 
     public void updateLeaveRequestStatus(int requestId, String status, int approverId, String comment) {
