@@ -63,17 +63,20 @@ public class CreateServlet extends HttpServlet {
             
             //xu lý file dinh kem
             byte[] attachment = null;
-            Part filePart = request.getPart("attachment");
-            if (filePart != null && filePart.getSize() > 0) {
-                try (InputStream inputStream = filePart.getInputStream()) {
-                    attachment = inputStream.readAllBytes(); // Đọc dữ liệu ảnh thành byte[]
+            try {
+                Part filePart = request.getPart("attachment");
+                if (filePart != null && filePart.getSize() > 0) {
+                    try (InputStream inputStream = filePart.getInputStream()) {
+                        attachment = inputStream.readAllBytes();
+                    }
                 }
-                // Kiểm tra kích thước (ví dụ: tối đa 5MB)
-                if (attachment.length > 5 * 1024 * 1024) {
-                    request.setAttribute("error", "File ảnh không được vượt quá 5MB");
+            } catch (jakarta.servlet.ServletException e) {
+                if (e.getCause() instanceof java.lang.IllegalStateException) {
+                    request.setAttribute("error", "File ảnh không được vượt quá 5MB hoặc request quá lớn!");
                     request.getRequestDispatcher("/view/feature/create_request.jsp").forward(request, response);
                     return;
                 }
+                throw e; // Ném lại nếu không phải lỗi kích thước
             }
             
             LeaveRequest leaveRequest = new LeaveRequest();
