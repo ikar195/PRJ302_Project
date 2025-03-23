@@ -21,7 +21,7 @@ public class ViewRequestServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            response.sendRedirect("login.jsp");
+            response.sendRedirect("login");
             return;
         }
 
