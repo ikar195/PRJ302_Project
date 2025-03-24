@@ -133,7 +133,7 @@
                     <textarea id="reason" name="reason" class="input-box" rows="4" placeholder="Nhập lý do nghỉ phép (tối đa 200 ký tự, ví dụ: ốm, việc gia đình)" maxlength="200" required></textarea>
                 </div>
                 <div class="input-group">
-                    <label for="attachment"><i class="fas fa-paperclip"></i> Đính kèm file ảnh .jpg (nếu có):</label>
+                    <label for="attachment"><i class="fas fa-paperclip"></i> Đính kèm ảnh .jpg (nếu có):</label>
                     <input type="file" id="attachment" name="attachment" class="input-box" accept="image/*">
                 </div>
                 <div class="button-group">

@@ -25,12 +25,13 @@ import model.User;
  */
 @WebServlet("/CreateRequest")
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 1, // 1MB (kích thước tối thiểu trước khi lưu tạm lên disk)
-    maxFileSize = 1024 * 1024 * 5,      // 5MB (kích thước tối đa của file)
-    maxRequestSize = 1024 * 1024 * 10   // 10MB (kích thước tối đa của request)
+    fileSizeThreshold = 1024 * 1024 * 1, //(kích thước tối thiểu trước khi lưu tạm lên disk)
+    maxFileSize = 1024 * 1024 * 20,      //(kích thước tối đa của file)
+    maxRequestSize = 1024 * 1024 * 20   //(kích thước tối đa của request)
 )
 public class CreateServlet extends HttpServlet {
     private final LeaveRequestDao leaveRequestDAO = new LeaveRequestDao();
+    private static final long MAX_FILE_SIZE = 1024 * 1024 * 5;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/view/feature/create_request.jsp").forward(request, response);
@@ -63,20 +64,26 @@ public class CreateServlet extends HttpServlet {
             
             //xu lý file dinh kem
             byte[] attachment = null;
+            Part filePart;
             try {
-                Part filePart = request.getPart("attachment");
-                if (filePart != null && filePart.getSize() > 0) {
-                    try (InputStream inputStream = filePart.getInputStream()) {
-                        attachment = inputStream.readAllBytes();
-                    }
-                }
-            } catch (jakarta.servlet.ServletException e) {
-                if (e.getCause() instanceof java.lang.IllegalStateException) {
-                    request.setAttribute("error", "File ảnh không được vượt quá 5MB hoặc request quá lớn!");
+                filePart = request.getPart("attachment");
+            } catch (IllegalStateException e) {
+                // Xử lý lỗi khi request vượt quá maxRequestSize
+                request.setAttribute("error", "Yêu cầu quá lớn, tổng kích thước không được vượt quá 20MB!");
+                request.getRequestDispatcher("/view/feature/create_request.jsp").forward(request, response);
+                return;
+            }
+
+            if (filePart != null && filePart.getSize() > 0) {
+                // Kiểm tra kích thước file thủ công trước khi đọc
+                if (filePart.getSize() > MAX_FILE_SIZE) {
+                    request.setAttribute("error", "File ảnh không được vượt quá 5MB!");
                     request.getRequestDispatcher("/view/feature/create_request.jsp").forward(request, response);
                     return;
                 }
-                throw e; // Ném lại nếu không phải lỗi kích thước
+                try (InputStream inputStream = filePart.getInputStream()) {
+                    attachment = inputStream.readAllBytes();
+                }
             }
             
             LeaveRequest leaveRequest = new LeaveRequest();
