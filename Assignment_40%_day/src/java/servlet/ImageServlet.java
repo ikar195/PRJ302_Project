@@ -4,7 +4,7 @@
  */
 package servlet;
 
-import dao.LeaveRequestDao;
+import dal.LeaveRequestDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

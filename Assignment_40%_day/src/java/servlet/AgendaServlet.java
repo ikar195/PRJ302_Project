@@ -1,7 +1,7 @@
 package servlet;
 
 import dal.UserDBContext;
-import dao.AgendaDAO;
+import dal.AgendaDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

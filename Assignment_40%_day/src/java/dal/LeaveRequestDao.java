@@ -1,11 +1,11 @@
-package dao;
+package dal;
 
 import dal.DBContext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import model.LeaveRequest;
-import dao.AgendaDAO;
+import dal.AgendaDAO;
 
 public class LeaveRequestDao {
 
