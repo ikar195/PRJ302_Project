@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class DBContext {
     private static final String USER = "ducdm";
     private static final String PASS = "12345678";
-    private static final String URL = "jdbc:sqlserver://localhost\\MSSQLSERVER:1433;databaseName=Assignment;encrypt=true;trustServerCertificate=true;";
+    private static final String URL = "jdbc:sqlserver://localhost\\MSSQLSERVER:1433;databaseName=LeaveManagementDB;encrypt=true;trustServerCertificate=true;";
 
     static {
         try {
