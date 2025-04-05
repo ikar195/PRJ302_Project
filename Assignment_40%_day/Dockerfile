@@ -8,7 +8,7 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 COPY dist/Assignment_40__day.war /usr/local/tomcat/webapps/ROOT.war
 
 # Mở cổng 8080
-EXPOSE 8080
+EXPOSE 9999
 
 # Chạy Tomcat
 CMD ["catalina.sh", "run"]
